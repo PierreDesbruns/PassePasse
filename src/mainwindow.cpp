@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     searchBar = new QLineEdit();
     searchBar->setCompleter(searchCompleter);
+    searchBar->setClearButtonEnabled(true);
 
     entryTable = new QTableWidget(0,6);
     entryTable->horizontalHeader()->setVisible(false);
