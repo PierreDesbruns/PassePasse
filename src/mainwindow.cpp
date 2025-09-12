@@ -20,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     searchCompleter = new QCompleter;
     searchCompleter->setModel(searchModel);
     searchCompleter->setCaseSensitivity(Qt::CaseInsensitive);
-    searchCompleter->setCompletionMode(QCompleter::InlineCompletion);
+    searchCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    searchCompleter->setFilterMode(Qt::MatchContains);
 
     searchBar = new QLineEdit();
     searchBar->setCompleter(searchCompleter);
@@ -194,7 +195,15 @@ void MainWindow::loadEntries()
     passwords = tempPasswords;
     dates = tempDates;
 
-    searchModel->setStringList(entrynames);
+    // Update search model without duplicates
+    QStringList searchEntrynames(entrynames);
+    searchEntrynames.removeDuplicates();
+    searchModel->setStringList(searchEntrynames);
+
+    // Clear search bar
+    searchBar->clear();
+
+    // Update display table
     updateTable();
 }
 
@@ -279,7 +288,15 @@ void MainWindow::addEntry()
         tr("Entrée ajoutée avec succès.")
         );
 
-    searchModel->setStringList(entrynames);
+    // Update search model without duplicates
+    QStringList searchEntrynames(entrynames);
+    searchEntrynames.removeDuplicates();
+    searchModel->setStringList(searchEntrynames);
+
+    // Clear search bar
+    searchBar->clear();
+
+    // Update display table
     updateTable();
 }
 
@@ -353,7 +370,15 @@ void MainWindow::delEntry(const int row)
         tr("Entrée supprimée avec succès.")
         );
 
-    searchModel->setStringList(entrynames);
+    // Update search model without duplicates
+    QStringList searchEntrynames(entrynames);
+    searchEntrynames.removeDuplicates();
+    searchModel->setStringList(searchEntrynames);
+
+    // Clear search bar
+    searchBar->clear();
+
+    // Update display table
     updateTable();
 }
 

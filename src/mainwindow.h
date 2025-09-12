@@ -61,7 +61,7 @@ private slots:
      */
     void updateTable() const;
     /**
-     * @brief Fills the table only with entries corresponding to given entry name.
+     * @brief Fill the table only with entries matching given entry name.
      * @param entryname: name of entries to display.
      *
      * Called when an entry name is selected by auto-completion.
