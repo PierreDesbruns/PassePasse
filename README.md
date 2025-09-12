@@ -5,7 +5,7 @@ This simple application allows the user to safely store strong passwords on his/
 Author: Pierre Desbruns
 
 ## Install
-Download the [password_manager-vX.X.X.zip file](https://github.com/PierreDesbruns/password_manager/releases/tag/v1.3.0) of the desired version (v1.3.0 is the latest) and extract all files.
+Download the [password_manager-vX.X.X.zip file](https://github.com/PierreDesbruns/password_manager/releases/tag/v1.3.1) of the desired version (v1.3.1 is the latest) and extract all files.
 Then, see [Usage](#usage).
 
 ## Build from source
@@ -22,7 +22,7 @@ This project has been built on Windows from [Qt Creator IDE](https://www.qt.io/p
 		PRIVATE "/path/to/libsodium-win64/lib/libsodium.a"
 	)
 	```
-3. Build the project with release compiler. A directory called `password_manager-v1.3.0-Release` is created by Qt in parent directory of `src`.
+3. Build the project with release compiler. A directory called `password_manager-v1.3.1-Release` is created by Qt in parent directory of `src`.
 4. Remove all files but `password_manager.exe` in release directory and execute `windeployqt.exe` (located inside Qt directory) in a command prompt with `/path/to/password_manager.exe` as argument.
 5. Move the three files `default/crypto.params`, `default/entries.cipher`, and `default/master.hash` to release directory.
 6. See [Usage](#usage).
@@ -35,7 +35,9 @@ Run `password_manager.exe`. An authentication window pops up and asks for master
 
 A correct master password gives access to the main window containing all entries in a table: first column for entry names; second for usernames; third for passwords; fourth for editing entry; fifth for re-generating password; sixth for deleting entry.
 
-Double-click on username or password to copy it to clipboard. Entry names can be searched in top search bar.
+Double-click on username or password to copy it to clipboard.
+
+Entry names can be searched in top search bar. Search bar is case insensitive. Entry names that simply contain the searched word will appear.
 
 A colored circle next to entry name gives indication on password generation date: green for \< 3 months; orange for \< 6 months; red for \> 6 months.
 
