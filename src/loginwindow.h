@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Pierre Desbruns
+// Copyright (C) 2025 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef LOGINWINDOW_H
@@ -17,6 +17,8 @@
 
 #include "pwmsecurity.h"
 
+
+namespace pwm {
 
 class LoginWindow : public QDialog
 {
@@ -68,5 +70,7 @@ private:
 
     bool passwordChanged = false; // flag to indicate if user asks to change master password
 };
+
+} // namespace pwm
 
 #endif // LOGINWINDOW_H

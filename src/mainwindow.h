@@ -1,4 +1,4 @@
-// Copyright (C) 2024 Pierre Desbruns
+// Copyright (C) 2025 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef MAINWINDOW_H
@@ -28,6 +28,8 @@
 #include "addentrywindow.h"
 #include "regentrywindow.h"
 
+
+namespace pwm {
 
 class MainWindow : public QMainWindow
 {
@@ -186,4 +188,7 @@ private:
      */
     const int entryRowBeingEdited() const;
 };
+
+} // namespace pwm
+
 #endif // MAINWINDOW_H

@@ -3,6 +3,7 @@
 
 #include "mainwindow.h"
 
+namespace pwm {
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -81,10 +82,10 @@ MainWindow::~MainWindow()
     if (passwords.contains(clipboard->text())) clipboard->clear();
 
     // Uncomment only if crypto parameters file is empty or parameters need to be changed
-    //pwm::updateCryptoParams();
+    //updateCryptoParams();
 
     // Encrypting with new master if modified
-    // pwm::writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates);
+    // writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates);
 }
 
 void MainWindow::copyCell(const int row, const int col) const
@@ -149,7 +150,7 @@ void MainWindow::loadEntries()
     QStringList tempPasswords = passwords;
     QStringList tempDates = dates;
 
-    QStringList entries = pwm::readEntries(loginWindow->getPassword());
+    QStringList entries = readEntries(loginWindow->getPassword());
 
     if (entries.isEmpty())
     {
@@ -174,7 +175,7 @@ void MainWindow::loadEntries()
     }
 
     // Re-writing file in case master password has changed
-    if (pwm::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Error in entries writing. Could not encrypt entries with new password.";
@@ -239,7 +240,7 @@ void MainWindow::addEntry()
         return;
     }
 
-    QString password = pwm::generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
+    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
 
     if (password.isEmpty())
     {
@@ -262,7 +263,7 @@ void MainWindow::addEntry()
     tempDates.append(QDate::currentDate().toString("yyyy.MM.dd"));
 
     // Writing entries in file
-    if (pwm::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         QMessageBox::critical(
@@ -343,7 +344,7 @@ void MainWindow::delEntry(const int row)
     }
 
     // Writing entries in file
-    if (pwm::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Failed to write entry. Entry" << entryname << username << "not added.";
@@ -401,7 +402,7 @@ void MainWindow::regEntry()
     QStringList tempPasswords = passwords;
     QStringList tempDates = dates;
 
-    QString password = pwm::generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
+    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
 
     if (password.isEmpty())
     {
@@ -431,7 +432,7 @@ void MainWindow::regEntry()
     }
 
     // Writing entries in file
-    if (pwm::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Failed to write entry. Entry" << entryname << username << "not added.";
@@ -506,7 +507,7 @@ void MainWindow::editEntry(const int row)
         usernames[indexToEdit] = entryTable->item(row,1)->text();
 
         // Writing entries in file
-        if (pwm::writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates) != 0)
+        if (writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates) != 0)
         {
             // Error in file writing
             QMessageBox::critical(
@@ -618,3 +619,5 @@ const int MainWindow::entryRowBeingEdited() const
 
     return -1;
 }
+
+} // namespace pwm

@@ -1,7 +1,10 @@
-// Copyright (C) 2024 Pierre Desbruns
+// Copyright (C) 2025 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "loginwindow.h"
+
+
+namespace pwm {
 
 LoginWindow::LoginWindow()
 {
@@ -59,9 +62,9 @@ void LoginWindow::verifications()
     const QString password = passwordLine->text();
 
     // Uncomment only if master password hash file is empty.
-    // pwm::updateMasterHash(password);
+    // updateMasterHash(password);
 
-    if (!pwm::masterIsCorrect(password))
+    if (!masterIsCorrect(password))
     {
         // Wrong password
         QMessageBox::critical(
@@ -110,7 +113,7 @@ void LoginWindow::verifications()
         }
         else
         {
-            pwm::updateMasterHash(newPassword);
+            updateMasterHash(newPassword);
 
             QMessageBox::information(
                 this,
@@ -138,3 +141,5 @@ void LoginWindow::changePassword()
     // Updating flag
     passwordChanged = true;
 }
+
+} // namespace pwm

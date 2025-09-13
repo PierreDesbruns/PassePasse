@@ -1,11 +1,12 @@
-// Copyright (C) 2024 Pierre Desbruns
+// Copyright (C) 2025 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
-
-#include "mainwindow.h"
 
 #include <QApplication>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "mainwindow.h"
+
 
 QtMessageHandler originalHandler = nullptr;
 
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
     originalHandler = qInstallMessageHandler(logToFile);
     qSetMessagePattern("[%{time yyyy.MM.dd hh:mm:ss}] %{type}: %{message}");
     QApplication a(argc, argv);
-    MainWindow w;
+    pwm::MainWindow w;
     w.show();
     return a.exec();
 }
