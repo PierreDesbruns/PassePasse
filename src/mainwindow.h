@@ -6,10 +6,16 @@
 
 #include <QApplication>
 #include <QMainWindow>
-#include <QIcon>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QFormLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QIcon>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QListView>
 #include <QCompleter>
 #include <QStringListModel>
 #include <QSize>
@@ -132,19 +138,74 @@ signals:
     void editEntryClicked(const int row);
 
 private:
-    QClipboard *clipboard;
+    const QSize windowSize = QSize(800,600);
 
-    const QSize windowSize = QSize(500,600);
+    // Variables storing entries information
+    QStringList entrynames;
+    QStringList usernames;
+    QStringList passwords;
+    QStringList dates;
 
-    QWidget *mainContent;
+    // Main widget
+    QWidget* mainContent;
+    QHBoxLayout* mainLayout;
 
-    QVBoxLayout *mainLayout;
-
-    QPushButton *addButton;
-
+    // Left widget
+    QWidget* leftWidget;
+    QVBoxLayout* leftLayout;
+    // Search bar
     QLineEdit *searchBar;
     QCompleter *searchCompleter;
     QStringListModel *searchModel; // must be updated whenever [entrynames] is updated
+    // Entry list view
+    QListView* entryListView;
+    // Add button
+    QPushButton *addEntryButton;
+
+    // Right widget
+    QWidget* rightWidget;
+    QVBoxLayout* rightLayout;
+    // Entry information group
+    QGroupBox* entryInfoGroup;
+    QGridLayout* entryInfoLayout;
+    QLabel* entrynameInfoLabel;
+    QLabel* usernameInfoLabel;
+    QLabel* passwordInfoLabel;
+    QLineEdit* entrynameInfoLine;
+    QLineEdit* usernameInfoLine;
+    QLineEdit* passwordInfoLine;
+    QPushButton* editEntrynameButton;
+    QPushButton* editUsernameButton;
+    QPushButton* editPasswordButton;
+    QPushButton* copyUsernameButton;
+    QPushButton* copyPasswordButton;
+    QPushButton* seePasswordButton;
+    // Entry action group
+    QGroupBox* entryActionGroup;
+    QVBoxLayout* entryActionLayout;
+    QFormLayout* linesEditLayout;
+    QHBoxLayout* spinBoxesLayout;
+    QHBoxLayout* actionButtonsLayout;
+    QLabel* entrynameActionLabel;
+    QLabel* usernameActionLabel;
+    QLabel* passwordActionLabel;
+    QLineEdit* entrynameActionLine;
+    QLineEdit* usernameActionLine;
+    QSpinBox* passwordLengthBox;
+    QCheckBox *enableLowCaseBox;
+    QCheckBox *enableUpCaseBox;
+    QCheckBox *enableNumbersBox;
+    QCheckBox *enableSpecialsBox;
+    QPushButton *confirmActionButton;
+    QPushButton *cancelActionButton;
+    // Delete button
+    QPushButton *delEntryButton;
+
+    // Clipboard for copying information
+    QClipboard *clipboard;
+
+
+    QPushButton *addButton;
 
     QTableWidget *entryTable;
 
@@ -152,10 +213,6 @@ private:
     AddEntryWindow *addWindow; // window responsible for adding entries
     RegEntryWindow *regWindow; // window responsible for re-generate entries password
 
-    QStringList entrynames;
-    QStringList usernames;
-    QStringList passwords;
-    QStringList dates;
 
     /**
      * @brief Add a row to the entry table.

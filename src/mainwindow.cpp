@@ -9,12 +9,12 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setFixedSize(windowSize);
-    setWindowTitle(tr("Gestionnaire de mots de passe"));
+    setWindowTitle("PassePasse");
     setWindowIcon(QIcon(":/logo"));
 
     clipboard = QApplication::clipboard();
 
-    addButton = new QPushButton(tr("Ajouter"));
+//    addButton = new QPushButton(tr("Ajouter"));
 
     searchModel = new QStringListModel;
 
@@ -28,52 +28,154 @@ MainWindow::MainWindow(QWidget *parent)
     searchBar->setCompleter(searchCompleter);
     searchBar->setClearButtonEnabled(true);
 
-    entryTable = new QTableWidget(0,6);
-    entryTable->horizontalHeader()->setVisible(false);
-    entryTable->verticalHeader()->setVisible(false);
-    entryTable->setColumnWidth(0,120); // entry names
-    entryTable->setColumnWidth(1,120); // user names
-    entryTable->setColumnWidth(2,100); // passwords
-    entryTable->setColumnWidth(3,20);  // edit buttons
-    entryTable->setColumnWidth(4,20);  // re-generate buttons
-    entryTable->setColumnWidth(5,20);  // delete buttons
+//    entryTable = new QTableWidget(0,6);
+//    entryTable->horizontalHeader()->setVisible(false);
+//    entryTable->verticalHeader()->setVisible(false);
+//    entryTable->setColumnWidth(0,120); // entry names
+//    entryTable->setColumnWidth(1,120); // user names
+//    entryTable->setColumnWidth(2,100); // passwords
+//    entryTable->setColumnWidth(3,20);  // edit buttons
+//    entryTable->setColumnWidth(4,20);  // re-generate buttons
+//    entryTable->setColumnWidth(5,20);  // delete buttons
 
-    loginWindow = new LoginWindow();
-    loginWindow->setWindowIcon(windowIcon());
-    loginWindow->setModal(Qt::ApplicationModal);
+//    loginWindow = new LoginWindow();
+//    loginWindow->setWindowIcon(windowIcon());
+//    loginWindow->setModal(Qt::ApplicationModal);
 
-    addWindow = new AddEntryWindow(ENTRYNAME_MAXLEN, USERNAME_MAXLEN, PASSWORD_MAXLEN, this);
-    addWindow->setWindowIcon(windowIcon());
+//    addWindow = new AddEntryWindow(ENTRYNAME_MAXLEN, USERNAME_MAXLEN, PASSWORD_MAXLEN, this);
+//    addWindow->setWindowIcon(windowIcon());
 
-    regWindow = new RegEntryWindow(PASSWORD_MAXLEN, this);
-    regWindow->setWindowIcon(windowIcon());
+//    regWindow = new RegEntryWindow(PASSWORD_MAXLEN, this);
+//    regWindow->setWindowIcon(windowIcon());
 
-    mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(addButton);
-    mainLayout->addWidget(searchBar);
-    mainLayout->addWidget(entryTable);
+    // Labels
+    entrynameInfoLabel = new QLabel(QString(tr("Nom de l'entrée")));
+    usernameInfoLabel = new QLabel(QString(tr("Nom d'utilisateur")));
+    passwordInfoLabel = new QLabel(QString(tr("Mot de passe")));
+    entrynameActionLabel = new QLabel(QString(tr("Nom de l'entrée")));
+    usernameActionLabel = new QLabel(QString(tr("Nom d'utilisateur")));
+    passwordActionLabel = new QLabel(QString(tr("Mot de passe")));
 
+    // Buttons
+    addEntryButton = new QPushButton(QString("+"));
+    delEntryButton = new QPushButton(QString("-"));
+    cancelActionButton = new QPushButton(QString(tr("Annuler")));
+    confirmActionButton = new QPushButton(QString(tr("Confirmer")));
+    editEntrynameButton = new QPushButton(QString(tr("Edit")));
+    editUsernameButton = new QPushButton(QString(tr("Edit")));
+    editPasswordButton = new QPushButton(QString(tr("Edit")));
+    copyUsernameButton = new QPushButton(QString(tr("Copy")));
+    copyPasswordButton = new QPushButton(QString(tr("Copy")));
+    seePasswordButton = new QPushButton(QString(tr("See")));
+
+    // List view
+    entryListView = new QListView();
+
+    // Lines edit
+    entrynameInfoLine = new QLineEdit();
+    entrynameInfoLine->setReadOnly(true);
+    usernameInfoLine = new QLineEdit();
+    usernameInfoLine->setReadOnly(true);
+    passwordInfoLine = new QLineEdit();
+    passwordInfoLine->setReadOnly(true);
+    entrynameActionLine = new QLineEdit();
+    entrynameActionLine->setMaxLength(ENTRYNAME_MAXLEN);
+    usernameActionLine = new QLineEdit();
+    usernameActionLine->setMaxLength(USERNAME_MAXLEN);
+
+    // Spin & check boxes
+    passwordLengthBox = new QSpinBox();
+    passwordLengthBox->setMaximum(PASSWORD_MAXLEN);
+    enableLowCaseBox = new QCheckBox(QString("a..z"));
+    enableUpCaseBox = new QCheckBox(QString("A..Z"));
+    enableNumbersBox = new QCheckBox(QString("0..9"));
+    enableSpecialsBox = new QCheckBox(QString("$..!"));
+
+    // Left widget
+    leftWidget = new QWidget();
+    leftWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    leftWidget->setFixedWidth(350);
+    leftLayout = new QVBoxLayout(leftWidget);
+    leftLayout->addWidget(searchBar);
+    leftLayout->addWidget(entryListView);
+    leftLayout->addWidget(addEntryButton);
+
+    // Entry information group
+    entryInfoGroup = new QGroupBox(QString(tr("INFORMATION SUR L'ENTREE")));
+    entryInfoGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    entryInfoLayout = new QGridLayout(entryInfoGroup);
+    entryInfoLayout->addWidget(entrynameInfoLabel, 0, 0, Qt::AlignLeft);
+    entryInfoLayout->addWidget(editEntrynameButton, 0, 3);
+    entryInfoLayout->addWidget(entrynameInfoLine, 1, 0, 1, 4, Qt::AlignTop);
+    entryInfoLayout->addWidget(usernameInfoLabel, 2, 0, Qt::AlignLeft);
+    entryInfoLayout->addWidget(copyUsernameButton, 2, 2);
+    entryInfoLayout->addWidget(editUsernameButton, 2, 3);
+    entryInfoLayout->addWidget(usernameInfoLine, 3, 0, 1, 4, Qt::AlignTop);
+    entryInfoLayout->addWidget(passwordInfoLabel, 4, 0, Qt::AlignLeft);
+    entryInfoLayout->addWidget(seePasswordButton, 4, 1);
+    entryInfoLayout->addWidget(copyPasswordButton, 4, 2);
+    entryInfoLayout->addWidget(editPasswordButton, 4, 3);
+    entryInfoLayout->addWidget(passwordInfoLine, 5, 0, 1, 4, Qt::AlignTop);
+
+    // Entry action group
+    entryActionGroup = new QGroupBox(QString(tr("AJOUTER / MODIFIER UNE ENTREE")));
+    entryActionGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    linesEditLayout = new QFormLayout();
+    linesEditLayout->addRow(entrynameActionLabel, entrynameActionLine);
+    linesEditLayout->addRow(usernameActionLabel, usernameActionLine);
+    linesEditLayout->addRow(passwordActionLabel, passwordLengthBox);
+    spinBoxesLayout = new QHBoxLayout();
+    spinBoxesLayout->addWidget(enableLowCaseBox);
+    spinBoxesLayout->addWidget(enableUpCaseBox);
+    spinBoxesLayout->addWidget(enableNumbersBox);
+    spinBoxesLayout->addWidget(enableSpecialsBox);
+    actionButtonsLayout = new QHBoxLayout();
+    actionButtonsLayout->addWidget(cancelActionButton);
+    actionButtonsLayout->addWidget(confirmActionButton);
+    entryActionLayout = new QVBoxLayout(entryActionGroup);
+    entryActionLayout->addLayout(linesEditLayout);
+    entryActionLayout->addLayout(spinBoxesLayout);
+    entryActionLayout->addLayout(actionButtonsLayout);
+
+    // Right widget
+    rightWidget = new QWidget();
+    rightWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    rightLayout = new QVBoxLayout(rightWidget);
+    rightLayout->addWidget(entryInfoGroup);
+    rightLayout->addSpacing(50);
+    rightLayout->addWidget(entryActionGroup);
+    rightLayout->addSpacing(50);
+    rightLayout->addWidget(delEntryButton);
+
+    // Main widget
     mainContent = new QWidget();
-    mainContent->setLayout(mainLayout);
+    mainLayout = new QHBoxLayout(mainContent);
+    mainLayout->addWidget(leftWidget);
+    mainLayout->addWidget(rightWidget);
+//    mainLayout->addWidget(addButton);
+//    mainLayout->addWidget(searchBar);
+//    mainLayout->addWidget(entryTable);
     setCentralWidget(mainContent);
 
-    // Windows opening
-    connect(addButton, SIGNAL(pressed()), addWindow, SLOT(open()));
-    connect(this, SIGNAL(regEntryClicked(int)), this, SLOT(openRegWindow(int)));
-    // Entry modification
-    connect(addWindow, SIGNAL(accepted()), this, SLOT(addEntry()));
-    connect(regWindow, SIGNAL(accepted()), this, SLOT(regEntry()));
-    connect(this, SIGNAL(delEntryClicked(int)), this, SLOT(delEntry(int)));
-    connect(this, SIGNAL(editEntryClicked(int)), this, SLOT(editEntry(int)));
-    // Table interaction
-    connect(entryTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(copyCell(int,int)));
-    connect(entryTable, SIGNAL(cellClicked(int,int)), this, SLOT(buttonFromCell(int,int)));
-    connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(updateTable(QString)));
-    // Login window
-    connect(loginWindow, SIGNAL(accepted()), this, SLOT(loadEntries()));
-    connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
+//    entryActionGroup->setVisible(false);
 
-    loginWindow->show();
+//    // Windows opening
+//    connect(addButton, SIGNAL(pressed()), addWindow, SLOT(open()));
+//    connect(this, SIGNAL(regEntryClicked(int)), this, SLOT(openRegWindow(int)));
+//    // Entry modification
+//    connect(addWindow, SIGNAL(accepted()), this, SLOT(addEntry()));
+//    connect(regWindow, SIGNAL(accepted()), this, SLOT(regEntry()));
+//    connect(this, SIGNAL(delEntryClicked(int)), this, SLOT(delEntry(int)));
+//    connect(this, SIGNAL(editEntryClicked(int)), this, SLOT(editEntry(int)));
+//    // Table interaction
+//    connect(entryTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(copyCell(int,int)));
+//    connect(entryTable, SIGNAL(cellClicked(int,int)), this, SLOT(buttonFromCell(int,int)));
+//    connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(updateTable(QString)));
+//    // Login window
+//    connect(loginWindow, SIGNAL(accepted()), this, SLOT(loadEntries()));
+//    connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
+
+//    loginWindow->show();
 }
 
 MainWindow::~MainWindow()
