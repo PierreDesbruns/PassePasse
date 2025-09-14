@@ -33,6 +33,8 @@
 #include "loginwindow.h"
 #include "addentrywindow.h"
 #include "regentrywindow.h"
+#include "entrylistdelegate.h"
+#include "entrylistmodel.h"
 
 
 namespace pwm {
@@ -159,6 +161,7 @@ private:
     QStringListModel *searchModel; // must be updated whenever [entrynames] is updated
     // Entry list view
     QListView* entryListView;
+    EntryListModel* entryListModel;
     // Add button
     QPushButton *addEntryButton;
 

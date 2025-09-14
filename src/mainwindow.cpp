@@ -16,14 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
 
 //    addButton = new QPushButton(tr("Ajouter"));
 
-    searchModel = new QStringListModel;
-
-    searchCompleter = new QCompleter;
+    // Search bar
+    searchModel = new QStringListModel();
+    searchCompleter = new QCompleter();
     searchCompleter->setModel(searchModel);
     searchCompleter->setCaseSensitivity(Qt::CaseInsensitive);
     searchCompleter->setCompletionMode(QCompleter::PopupCompletion);
     searchCompleter->setFilterMode(Qt::MatchContains);
-
     searchBar = new QLineEdit();
     searchBar->setCompleter(searchCompleter);
     searchBar->setClearButtonEnabled(true);
@@ -68,9 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
     copyPasswordButton = new QPushButton(QString(tr("Copy")));
     seePasswordButton = new QPushButton(QString(tr("See")));
 
-    // List view
-    entryListView = new QListView();
-
     // Lines edit
     entrynameInfoLine = new QLineEdit();
     entrynameInfoLine->setReadOnly(true);
@@ -90,6 +86,12 @@ MainWindow::MainWindow(QWidget *parent)
     enableUpCaseBox = new QCheckBox(QString("A..Z"));
     enableNumbersBox = new QCheckBox(QString("0..9"));
     enableSpecialsBox = new QCheckBox(QString("$..!"));
+
+    // Entry list view
+    entryListModel = new EntryListModel();
+    entryListView = new QListView();
+    entryListView->setModel(entryListModel);
+    entryListView->setItemDelegate(new EntryListDelegate());
 
     // Left widget
     leftWidget = new QWidget();

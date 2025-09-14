@@ -17,17 +17,14 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         ressources.qrc
+        addentrywindow.h addentrywindow.cpp
+        regentrywindow.h regentrywindow.cpp
+        loginwindow.h loginwindow.cpp
+        pwmsecurity.h pwmsecurity.cpp
+        entrylistmodel.h entrylistmodel.cpp
+        entrylistdelegate.h entrylistdelegate.cpp
+        mainwindow.h mainwindow.cpp
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        addentrywindow.cpp
-        addentrywindow.h
-        regentrywindow.cpp
-        regentrywindow.h
-        loginwindow.cpp
-        loginwindow.h
-        pwmsecurity.cpp
-        pwmsecurity.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
