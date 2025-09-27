@@ -35,6 +35,7 @@
 #include "regentrywindow.h"
 #include "entrylistdelegate.h"
 #include "entrylistmodel.h"
+#include "entryinteractionwidget.h"
 
 
 namespace pwm {
@@ -168,39 +169,9 @@ private:
     // Right widget
     QWidget* rightWidget;
     QVBoxLayout* rightLayout;
-    // Entry information group
-    QGroupBox* entryInfoGroup;
-    QGridLayout* entryInfoLayout;
-    QLabel* entrynameInfoLabel;
-    QLabel* usernameInfoLabel;
-    QLabel* passwordInfoLabel;
-    QLineEdit* entrynameInfoLine;
-    QLineEdit* usernameInfoLine;
-    QLineEdit* passwordInfoLine;
-    QPushButton* editEntrynameButton;
-    QPushButton* editUsernameButton;
-    QPushButton* editPasswordButton;
-    QPushButton* copyUsernameButton;
-    QPushButton* copyPasswordButton;
-    QPushButton* seePasswordButton;
-    // Entry action group
-    QGroupBox* entryActionGroup;
-    QVBoxLayout* entryActionLayout;
-    QFormLayout* linesEditLayout;
-    QHBoxLayout* spinBoxesLayout;
-    QHBoxLayout* actionButtonsLayout;
-    QLabel* entrynameActionLabel;
-    QLabel* usernameActionLabel;
-    QLabel* passwordActionLabel;
-    QLineEdit* entrynameActionLine;
-    QLineEdit* usernameActionLine;
-    QSpinBox* passwordLengthBox;
-    QCheckBox *enableLowCaseBox;
-    QCheckBox *enableUpCaseBox;
-    QCheckBox *enableNumbersBox;
-    QCheckBox *enableSpecialsBox;
-    QPushButton *confirmActionButton;
-    QPushButton *cancelActionButton;
+    // Entry interaction widget
+    EntryInteractionWidget* entryInteractionWidget;
+
     // Delete button
     QPushButton *delEntryButton;
 

@@ -1,3 +1,6 @@
+// Copyright (C) 2025 Pierre Desbruns
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef ENTRYLISTMODEL_H
 #define ENTRYLISTMODEL_H
 

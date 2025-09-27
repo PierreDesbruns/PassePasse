@@ -1,5 +1,7 @@
-#include "entrylistdelegate.h"
+// Copyright (C) 2025 Pierre Desbruns
+// SPDX-License-Identifier: LGPL-3.0-only
 
+#include "entrylistdelegate.h"
 
 namespace pwm {
 
@@ -8,7 +10,7 @@ EntryListDelegate::EntryListDelegate(QObject* parent)
 {
 }
 
-void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     // Highlight item if selected
     if(option.state & QStyle::State_Selected)

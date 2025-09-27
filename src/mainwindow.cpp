@@ -8,7 +8,7 @@ namespace pwm {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setFixedSize(windowSize);
+//    setFixedSize(windowSize);
     setWindowTitle("PassePasse");
     setWindowIcon(QIcon(":/logo"));
 
@@ -47,45 +47,9 @@ MainWindow::MainWindow(QWidget *parent)
 //    regWindow = new RegEntryWindow(PASSWORD_MAXLEN, this);
 //    regWindow->setWindowIcon(windowIcon());
 
-    // Labels
-    entrynameInfoLabel = new QLabel(QString(tr("Nom de l'entrée")));
-    usernameInfoLabel = new QLabel(QString(tr("Nom d'utilisateur")));
-    passwordInfoLabel = new QLabel(QString(tr("Mot de passe")));
-    entrynameActionLabel = new QLabel(QString(tr("Nom de l'entrée")));
-    usernameActionLabel = new QLabel(QString(tr("Nom d'utilisateur")));
-    passwordActionLabel = new QLabel(QString(tr("Mot de passe")));
-
     // Buttons
     addEntryButton = new QPushButton(QString("+"));
     delEntryButton = new QPushButton(QString("-"));
-    cancelActionButton = new QPushButton(QString(tr("Annuler")));
-    confirmActionButton = new QPushButton(QString(tr("Confirmer")));
-    editEntrynameButton = new QPushButton(QString(tr("Edit")));
-    editUsernameButton = new QPushButton(QString(tr("Edit")));
-    editPasswordButton = new QPushButton(QString(tr("Edit")));
-    copyUsernameButton = new QPushButton(QString(tr("Copy")));
-    copyPasswordButton = new QPushButton(QString(tr("Copy")));
-    seePasswordButton = new QPushButton(QString(tr("See")));
-
-    // Lines edit
-    entrynameInfoLine = new QLineEdit();
-    entrynameInfoLine->setReadOnly(true);
-    usernameInfoLine = new QLineEdit();
-    usernameInfoLine->setReadOnly(true);
-    passwordInfoLine = new QLineEdit();
-    passwordInfoLine->setReadOnly(true);
-    entrynameActionLine = new QLineEdit();
-    entrynameActionLine->setMaxLength(ENTRYNAME_MAXLEN);
-    usernameActionLine = new QLineEdit();
-    usernameActionLine->setMaxLength(USERNAME_MAXLEN);
-
-    // Spin & check boxes
-    passwordLengthBox = new QSpinBox();
-    passwordLengthBox->setMaximum(PASSWORD_MAXLEN);
-    enableLowCaseBox = new QCheckBox(QString("a..z"));
-    enableUpCaseBox = new QCheckBox(QString("A..Z"));
-    enableNumbersBox = new QCheckBox(QString("0..9"));
-    enableSpecialsBox = new QCheckBox(QString("$..!"));
 
     // Entry list view
     entryListModel = new EntryListModel();
@@ -103,51 +67,19 @@ MainWindow::MainWindow(QWidget *parent)
     leftLayout->addWidget(addEntryButton);
 
     // Entry information group
-    entryInfoGroup = new QGroupBox(QString(tr("INFORMATION SUR L'ENTREE")));
-    entryInfoGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    entryInfoLayout = new QGridLayout(entryInfoGroup);
-    entryInfoLayout->addWidget(entrynameInfoLabel, 0, 0, Qt::AlignLeft);
-    entryInfoLayout->addWidget(editEntrynameButton, 0, 3);
-    entryInfoLayout->addWidget(entrynameInfoLine, 1, 0, 1, 4, Qt::AlignTop);
-    entryInfoLayout->addWidget(usernameInfoLabel, 2, 0, Qt::AlignLeft);
-    entryInfoLayout->addWidget(copyUsernameButton, 2, 2);
-    entryInfoLayout->addWidget(editUsernameButton, 2, 3);
-    entryInfoLayout->addWidget(usernameInfoLine, 3, 0, 1, 4, Qt::AlignTop);
-    entryInfoLayout->addWidget(passwordInfoLabel, 4, 0, Qt::AlignLeft);
-    entryInfoLayout->addWidget(seePasswordButton, 4, 1);
-    entryInfoLayout->addWidget(copyPasswordButton, 4, 2);
-    entryInfoLayout->addWidget(editPasswordButton, 4, 3);
-    entryInfoLayout->addWidget(passwordInfoLine, 5, 0, 1, 4, Qt::AlignTop);
-
-    // Entry action group
-    entryActionGroup = new QGroupBox(QString(tr("AJOUTER / MODIFIER UNE ENTREE")));
-    entryActionGroup->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    linesEditLayout = new QFormLayout();
-    linesEditLayout->addRow(entrynameActionLabel, entrynameActionLine);
-    linesEditLayout->addRow(usernameActionLabel, usernameActionLine);
-    linesEditLayout->addRow(passwordActionLabel, passwordLengthBox);
-    spinBoxesLayout = new QHBoxLayout();
-    spinBoxesLayout->addWidget(enableLowCaseBox);
-    spinBoxesLayout->addWidget(enableUpCaseBox);
-    spinBoxesLayout->addWidget(enableNumbersBox);
-    spinBoxesLayout->addWidget(enableSpecialsBox);
-    actionButtonsLayout = new QHBoxLayout();
-    actionButtonsLayout->addWidget(cancelActionButton);
-    actionButtonsLayout->addWidget(confirmActionButton);
-    entryActionLayout = new QVBoxLayout(entryActionGroup);
-    entryActionLayout->addLayout(linesEditLayout);
-    entryActionLayout->addLayout(spinBoxesLayout);
-    entryActionLayout->addLayout(actionButtonsLayout);
+    entryInteractionWidget = new EntryInteractionWidget();
+    entryInteractionWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     // Right widget
     rightWidget = new QWidget();
-    rightWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
+    rightWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     rightLayout = new QVBoxLayout(rightWidget);
-    rightLayout->addWidget(entryInfoGroup);
-    rightLayout->addSpacing(50);
-    rightLayout->addWidget(entryActionGroup);
-    rightLayout->addSpacing(50);
-    rightLayout->addWidget(delEntryButton);
+    rightLayout->addWidget(entryInteractionWidget, 1);
+//    rightLayout->addSpacing(50);
+//    rightLayout->addWidget(entryAddGroup, 1);
+//    rightLayout->addSpacing(50);
+//    rightLayout->addStretch(50);
+    rightLayout->addWidget(delEntryButton, 1);
 
     // Main widget
     mainContent = new QWidget();
@@ -159,8 +91,10 @@ MainWindow::MainWindow(QWidget *parent)
 //    mainLayout->addWidget(entryTable);
     setCentralWidget(mainContent);
 
-//    entryActionGroup->setVisible(false);
-
+    // Signals / slots
+    connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddMode()));
+//    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
+//    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
 //    // Windows opening
 //    connect(addButton, SIGNAL(pressed()), addWindow, SLOT(open()));
 //    connect(this, SIGNAL(regEntryClicked(int)), this, SLOT(openRegWindow(int)));

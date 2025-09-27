@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-project(password_manager VERSION 1.1.1 LANGUAGES CXX)
+project(password_manager VERSION 2.1.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -23,6 +23,9 @@ set(PROJECT_SOURCES
         pwmsecurity.h pwmsecurity.cpp
         entrylistmodel.h entrylistmodel.cpp
         entrylistdelegate.h entrylistdelegate.cpp
+        passwordlengthslider.h passwordlengthslider.cpp
+        charactertypeswidget.h charactertypeswidget.cpp
+        entryinteractionwidget.h entryinteractionwidget.cpp
         mainwindow.h mainwindow.cpp
         main.cpp
 )
