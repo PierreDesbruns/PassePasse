@@ -55,7 +55,6 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     //    painter->drawLine(titleRect.topLeft(),titleRect.bottomLeft());
     //    pen.setStyle(Qt::SolidLine);
     //    painter->setPen(pen);
-
     font.setBold(true);
     painter->setFont(font);
     painter->drawText(entrynameRect, Qt::AlignBottom|Qt::AlignLeft|Qt::TextWordWrap, entryname);
@@ -71,7 +70,6 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     //    painter->drawLine(descRect.topLeft(),descRect.bottomLeft());
     //    pen.setStyle(Qt::SolidLine);
     //    painter->setPen(pen);
-
     font.setBold(false);
     painter->setFont(font);
     painter->setPen(QColor(100,100,100));

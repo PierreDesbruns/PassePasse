@@ -25,20 +25,28 @@ CharacterTypesWidget::CharacterTypesWidget(QWidget *parent)
     mainLayout->addWidget(enableUpCaseBox, 1, Qt::AlignHCenter);
     mainLayout->addWidget(enableNumbersBox, 1, Qt::AlignHCenter);
     mainLayout->addWidget(enableSpecialsBox, 1, Qt::AlignHCenter);
+
+    clear();
 }
 
-bool CharacterTypesWidget::nothingChecked() const
+int CharacterTypesWidget::checkedBoxes() const
 {
-    if (checkBoxesGroup->checkedId() == -1)
-        return true;
+    int checked = 0;
 
-    return false;
+    foreach (auto checkBox, checkBoxesGroup->buttons())
+    {
+        checked <<= 1;
+        if (checkBox->isChecked())
+            checked++;
+    }
+
+    return checked;
 }
 
 void CharacterTypesWidget::clear()
 {
-    foreach (auto checkBoxes, checkBoxesGroup->buttons())
-        checkBoxes->setChecked(false);
+    foreach (auto checkBox, checkBoxesGroup->buttons())
+        checkBox->setChecked(true);
 }
 
 } // namespace pwm

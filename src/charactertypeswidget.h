@@ -19,13 +19,19 @@ class CharacterTypesWidget : public QWidget
 public:
     explicit CharacterTypesWidget(QWidget* parent = nullptr);
     /**
-     * @brief Return true if no box is checked; false otherwise.
+     * @brief Return a number btw. 0 and 15 corresponding to checked boxes.
+     * @example 0b0000 (0): nothing is checed.
+     * @example 0b1000 (8): low case.
+     * @example 0b0100 (4): upper case.
+     * @example 0b0010 (2): numbers.
+     * @example 0b0001 (1): special characters.
+     * @example 0b1100 (12): low and upper case.
      */
-    bool nothingChecked() const;
+    int checkedBoxes() const;
 
 public slots:
     /**
-     * @brief Clear boxes' state to unchecked.
+     * @brief Clear boxes' state to checked.
      */
     void clear();
 

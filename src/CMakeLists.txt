@@ -21,11 +21,13 @@ set(PROJECT_SOURCES
         regentrywindow.h regentrywindow.cpp
         loginwindow.h loginwindow.cpp
         pwmsecurity.h pwmsecurity.cpp
+        entry.h entry.cpp
+        entryinteractionwidget.h entryinteractionwidget.cpp
         entrylistmodel.h entrylistmodel.cpp
         entrylistdelegate.h entrylistdelegate.cpp
+        entrymanager.h entrymanager.cpp
         passwordlengthslider.h passwordlengthslider.cpp
         charactertypeswidget.h charactertypeswidget.cpp
-        entryinteractionwidget.h entryinteractionwidget.cpp
         mainwindow.h mainwindow.cpp
         main.cpp
 )

@@ -13,6 +13,7 @@
 
 #include "charactertypeswidget.h"
 #include "passwordlengthslider.h"
+#include "entrymanager.h"
 
 
 namespace pwm {
@@ -23,7 +24,7 @@ class EntryInteractionWidget : public QWidget
     Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode NOTIFY displayModeChanged)
 
 public:
-    explicit EntryInteractionWidget(QWidget* parent = nullptr);
+    explicit EntryInteractionWidget(EntryManager* entryManager, QWidget* parent = nullptr);
 
     enum DisplayMode { EntryInfo, AddEntry, ResetPassword };
 
@@ -61,7 +62,8 @@ private slots:
     void updateDisplay(DisplayMode displayMode);
 
 signals:
-    void displayModeChanged(DisplayMode newDisplayMode);
+    void displayModeChanged(const DisplayMode newDisplayMode);
+    void entryAdded(const QString& entryname, const QString username, const QString password);
 
 private:
     // Attributes
@@ -70,6 +72,8 @@ private:
     QString entryname;
     QString username;
     QString password;
+
+    EntryManager* entryManager;
 
     // Widgets
     QGridLayout* mainLayout;

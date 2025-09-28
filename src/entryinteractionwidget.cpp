@@ -5,8 +5,8 @@
 
 namespace pwm {
 
-EntryInteractionWidget::EntryInteractionWidget(QWidget *parent)
-    : QWidget{parent}, m_displayMode(EntryInfo), entryname(""), username(""), password("")
+EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidget* parent)
+    : QWidget{parent}, m_displayMode(EntryInfo), entryname(""), username(""), password(""), entryManager(entryManager)
 {
     // Labels
     entrynameLabel = new QLabel(QString(tr("Nom de l'entrée")));
@@ -82,6 +82,20 @@ void EntryInteractionWidget::cancel()
 
 void EntryInteractionWidget::confirm()
 {
+    // Getting values from widgets
+    entryname = entrynameLine->text();
+    username = usernameLine->text();
+    int passwordLength = pwdLengthSlider->value();
+    int characterTypes = charTypesWidget->checkedBoxes();
+
+    // Requesting entry manager after verifications
+    if (m_displayMode == AddEntry)
+    {
+        if (!entryname.isEmpty() && !username.isEmpty() && characterTypes)
+            entryManager->addEntry(entryname, username, passwordLength, characterTypes);
+    }
+
+    // Rsetting attributes and display to default
     entryname = "";
     username = "";
     password = "";
@@ -94,47 +108,45 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
     {
     case EntryInfo:
         entrynameLine->setReadOnly(true);
-        entrynameLine->setText(entryname);
         usernameLine->setReadOnly(true);
-        usernameLine->setText(username);
         passwordLine->setReadOnly(true);
-        passwordLine->setEchoMode(QLineEdit::Password);
-        passwordLine->setText(password);
         pwdLengthSlider->hide();
         pwdLengthSlider->clear();
         charTypesWidget->hide();
-        charTypesWidget->clear();
         cancelButton->hide();
         confirmButton->hide();
         break;
     case AddEntry:
+        entryname = "";
+        username = "";
+        password = "";
         entrynameLine->setReadOnly(false);
-        entrynameLine->setText("");
         usernameLine->setReadOnly(false);
-        usernameLine->setText("");
         passwordLine->setReadOnly(true);
-        passwordLine->setEchoMode(QLineEdit::Password);
-        passwordLine->setText("");
         pwdLengthSlider->show();
+        pwdLengthSlider->clear();
         charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
         break;
     case ResetPassword:
         entrynameLine->setReadOnly(true);
-        entrynameLine->setText(entryname);
         usernameLine->setReadOnly(true);
-        usernameLine->setText(username);
         passwordLine->setReadOnly(true);
-        passwordLine->setEchoMode(QLineEdit::Password);
-        passwordLine->setText(password);
         pwdLengthSlider->show();
+        pwdLengthSlider->setValue(password.size());
         charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
         break;
     default: break;
     }
+
+    entrynameLine->setText(entryname);
+    usernameLine->setText(username);
+    passwordLine->setText(password);
+    passwordLine->setEchoMode(QLineEdit::Password);
+    charTypesWidget->clear();
 }
 
 } // namespace pwm

@@ -14,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     clipboard = QApplication::clipboard();
 
+    // Entry manager
+    entryManager = new EntryManager(this);
+
 //    addButton = new QPushButton(tr("Ajouter"));
 
     // Search bar
@@ -67,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     leftLayout->addWidget(addEntryButton);
 
     // Entry information group
-    entryInteractionWidget = new EntryInteractionWidget();
+    entryInteractionWidget = new EntryInteractionWidget(entryManager);
     entryInteractionWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     // Right widget
@@ -75,10 +78,6 @@ MainWindow::MainWindow(QWidget *parent)
     rightWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     rightLayout = new QVBoxLayout(rightWidget);
     rightLayout->addWidget(entryInteractionWidget, 1);
-//    rightLayout->addSpacing(50);
-//    rightLayout->addWidget(entryAddGroup, 1);
-//    rightLayout->addSpacing(50);
-//    rightLayout->addStretch(50);
     rightLayout->addWidget(delEntryButton, 1);
 
     // Main widget
@@ -93,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Signals / slots
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddMode()));
+    connect(entryManager, SIGNAL(entryAdded()), this, SLOT(updateListView()));
 //    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
 //    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
 //    // Windows opening
@@ -581,6 +581,30 @@ void MainWindow::editEntry(const int row)
                ).arg(entryTable->item(rowEdited, 0)->text(), entryTable->item(rowEdited, 1)->text())
             );
     }
+}
+
+void MainWindow::updateListView()
+{
+    QStringList entrynames;
+    QStringList usernames;
+
+    // Get entry and user names from entry manager
+    foreach (const Entry& entry, entryManager->entryList())
+    {
+        entrynames << entry.entryname();
+        usernames << entry.username();
+    }
+
+    // Update list view
+    entryListModel->setLists(entrynames, usernames);
+
+    // Update search model without duplicates
+    QStringList searchEntrynames(entrynames);
+    searchEntrynames.removeDuplicates();
+    searchModel->setStringList(searchEntrynames);
+
+    // Clear search bar
+    searchBar->clear();
 }
 
 void MainWindow::addRow(const int entryIndex) const

@@ -8,22 +8,18 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QGridLayout>
-#include <QFormLayout>
-#include <QGroupBox>
 #include <QLabel>
 #include <QIcon>
 #include <QPushButton>
-#include <QLineEdit>
 #include <QListView>
 #include <QCompleter>
-#include <QStringListModel>
 #include <QSize>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QHeaderView>
 #include <QString>
 #include <QStringList>
+#include <QStringListModel>
 #include <QClipboard>
 #include <QDate>
 #include <QMessageBox>
@@ -33,9 +29,11 @@
 #include "loginwindow.h"
 #include "addentrywindow.h"
 #include "regentrywindow.h"
+#include "entry.h"
 #include "entrylistdelegate.h"
 #include "entrylistmodel.h"
 #include "entryinteractionwidget.h"
+#include "entrymanager.h"
 
 
 namespace pwm {
@@ -120,6 +118,11 @@ private slots:
      */
     void editEntry(const int row);
 
+    /**
+     * @brief Update list view and search bar whenever entry manager's list is modified.
+     */
+    void updateListView();
+
 signals:
     /**
      * @brief Signal emitted when delete button is clicked.
@@ -149,6 +152,9 @@ private:
     QStringList passwords;
     QStringList dates;
 
+    // Entry manager
+    EntryManager* entryManager;
+
     // Main widget
     QWidget* mainContent;
     QHBoxLayout* mainLayout;
@@ -157,26 +163,25 @@ private:
     QWidget* leftWidget;
     QVBoxLayout* leftLayout;
     // Search bar
-    QLineEdit *searchBar;
-    QCompleter *searchCompleter;
-    QStringListModel *searchModel; // must be updated whenever [entrynames] is updated
+    QLineEdit* searchBar;
+    QCompleter* searchCompleter;
+    QStringListModel* searchModel; // must be updated whenever [entrynames] is updated
     // Entry list view
     QListView* entryListView;
     EntryListModel* entryListModel;
     // Add button
-    QPushButton *addEntryButton;
+    QPushButton* addEntryButton;
 
     // Right widget
     QWidget* rightWidget;
     QVBoxLayout* rightLayout;
     // Entry interaction widget
     EntryInteractionWidget* entryInteractionWidget;
-
     // Delete button
-    QPushButton *delEntryButton;
+    QPushButton* delEntryButton;
 
     // Clipboard for copying information
-    QClipboard *clipboard;
+    QClipboard* clipboard;
 
 
     QPushButton *addButton;

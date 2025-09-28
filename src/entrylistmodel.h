@@ -18,6 +18,7 @@ public:
     explicit EntryListModel(QObject* parent = nullptr);
     /**
      * @brief Return number of strings in [entrynames].
+     * @note Return -1 if [entrynames] and [usernames] have different size.
      */
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     /**

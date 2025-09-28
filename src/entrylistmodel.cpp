@@ -14,7 +14,10 @@ EntryListModel::EntryListModel(QObject *parent)
 int EntryListModel::rowCount(const QModelIndex& /*parent*/) const
 {
     if (entrynames.size() != usernames.size())
-        qWarning() << "Number of entrynames and usernames are different.";
+    {
+        qWarning() << "Number of entrynames and usernames are different. Returned -1 as row count.";
+        return -1;
+    }
 
     return entrynames.size();
 }
@@ -44,8 +47,14 @@ void EntryListModel::setLists(const QStringList& newEntrynames, const QStringLis
         return;
     }
 
+    // Updating lists
     entrynames = newEntrynames;
     usernames = newUsernames;
+
+    // Creating index and emitting update signal
+    QModelIndex topLeft = createIndex(0,0);
+    QModelIndex bottomRight = createIndex(rowCount(), 0);
+    emit dataChanged(topLeft, bottomRight);
 }
 
 } // namespace pwm
