@@ -90,7 +90,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Signals / slots
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddMode()));
-    connect(entryManager, SIGNAL(entryAdded()), this, SLOT(updateListView()));
+    connect(entryManager, &EntryManager::entryAdded, entryListModel, &EntryListModel::updateLists);
+//    connect(entryManager, SIGNAL(entryAdded(QStringList,QStringList)), entryListModel, SLOT(updateLists(QStringList,QStringList)));
     connect(entryListView, SIGNAL(entrySelected(QString,QString)), entryInteractionWidget, SLOT(displayEntry(QString,QString)));
 //    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
 //    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
@@ -593,9 +594,6 @@ void MainWindow::updateListView()
         entrynames << entry.entryname();
         usernames << entry.username();
     }
-
-    // Update list view
-    entryListModel->setLists(entrynames, usernames);
 
     // Update search model without duplicates
     QStringList searchEntrynames(entrynames);

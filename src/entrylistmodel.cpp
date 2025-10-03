@@ -39,7 +39,7 @@ QVariant EntryListModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-void EntryListModel::setLists(const QStringList& newEntrynames, const QStringList& newUsernames)
+void EntryListModel::updateLists(const QStringList& newEntrynames, const QStringList& newUsernames)
 {
     if (newEntrynames.size() != newUsernames.size())
     {

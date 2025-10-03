@@ -25,10 +25,12 @@ public:
      * @brief Return index's entryname or username, depending on the role.
      */
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+
+public slots:
     /**
-     * @brief Set entry names and user names to given lists.
+     * @brief Update entry names and user names lists.
      */
-    void setLists(const QStringList& newEntrynames, const QStringList& newUsernames);
+    void updateLists(const QStringList& newEntrynames, const QStringList& newUsernames);
 
 private:
     QStringList entrynames;

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QStringList>
 #include <QString>
 #include <QDebug>
 #include <QMessageBox>
@@ -34,7 +35,7 @@ public slots:
     void addEntry(const QString& entryname, const QString& username, const int passwordLength, const int characterTypes);
 
 signals:
-    void entryAdded();
+    void entryAdded(const QStringList& entrynames, const QStringList& usernames);
 
 private:
     QList<Entry> m_entryList;
