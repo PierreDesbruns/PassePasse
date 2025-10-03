@@ -55,10 +55,8 @@ MainWindow::MainWindow(QWidget *parent)
     delEntryButton = new QPushButton(QString("-"));
 
     // Entry list view
-    entryListModel = new EntryListModel();
-    entryListView = new QListView();
-    entryListView->setModel(entryListModel);
-    entryListView->setItemDelegate(new EntryListDelegate());
+    entryListModel = new EntryListModel(this);
+    entryListView = new EntryListView(entryListModel);
 
     // Left widget
     leftWidget = new QWidget();
@@ -93,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Signals / slots
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddMode()));
     connect(entryManager, SIGNAL(entryAdded()), this, SLOT(updateListView()));
+    connect(entryListView, SIGNAL(entrySelected(QString,QString)), entryInteractionWidget, SLOT(displayEntry(QString,QString)));
 //    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
 //    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
 //    // Windows opening

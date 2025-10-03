@@ -23,6 +23,7 @@ set(PROJECT_SOURCES
         pwmsecurity.h pwmsecurity.cpp
         entry.h entry.cpp
         entryinteractionwidget.h entryinteractionwidget.cpp
+        entrylistview.h entrylistview.cpp
         entrylistmodel.h entrylistmodel.cpp
         entrylistdelegate.h entrylistdelegate.cpp
         entrymanager.h entrymanager.cpp

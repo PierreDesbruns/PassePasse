@@ -13,7 +13,7 @@ EntryListDelegate::EntryListDelegate(QObject* parent)
 void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     // Highlight item if selected
-    if(option.state & QStyle::State_Selected)
+    if(option.state & QStyle::State_HasFocus)
         painter->fillRect(option.rect, option.palette.color(QPalette::Highlight));
 
     // Font

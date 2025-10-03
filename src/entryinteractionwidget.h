@@ -42,10 +42,10 @@ public slots:
     void triggerResetMode() { setDisplayMode(ResetPassword); }
     /**
      * @brief Setter of [entryname], [username], and [password].
-     * @param entryname, username, password: Entry info to be displayed.
+     * @param entryname, username: Entry info to be displayed.
      * Trigger updateDisplay().
      */
-    void displayEntry(const QString& newEntryname, const QString& newUsername, const QString& newPassword);
+    void displayEntry(const QString& newEntryname, const QString& newUsername);
     /**
      * @brief Cancel add or reset action and set display mode to entry info.
      */
@@ -60,18 +60,14 @@ private slots:
      * @brief Manage display according to the display mode.
      */
     void updateDisplay(DisplayMode displayMode);
+    void reversePasswordEchoMode();
 
 signals:
     void displayModeChanged(const DisplayMode newDisplayMode);
-    void entryAdded(const QString& entryname, const QString username, const QString password);
 
 private:
     // Attributes
     DisplayMode m_displayMode;
-
-    QString entryname;
-    QString username;
-    QString password;
 
     EntryManager* entryManager;
 

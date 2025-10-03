@@ -30,6 +30,7 @@
 #include "addentrywindow.h"
 #include "regentrywindow.h"
 #include "entry.h"
+#include "entrylistview.h"
 #include "entrylistdelegate.h"
 #include "entrylistmodel.h"
 #include "entryinteractionwidget.h"
@@ -167,7 +168,7 @@ private:
     QCompleter* searchCompleter;
     QStringListModel* searchModel; // must be updated whenever [entrynames] is updated
     // Entry list view
-    QListView* entryListView;
+    EntryListView* entryListView;
     EntryListModel* entryListModel;
     // Add button
     QPushButton* addEntryButton;
