@@ -8,11 +8,6 @@ EntryManager::EntryManager(QObject* parent)
 
 }
 
-QString EntryManager::passwordOf(const QString& entryname, const QString& username)
-{
-    return m_entryList.at(m_entryList.indexOf(Entry(entryname, username))).password();
-}
-
 void EntryManager::addEntry(const QString &entryname, const QString &username, const int passwordLength, const int characterTypes)
 {
     Entry testEntry(entryname, username);
@@ -54,14 +49,7 @@ void EntryManager::addEntry(const QString &entryname, const QString &username, c
     m_entryList << Entry(entryname, username, password, date);
 
     // entryAdded signal
-    QStringList entrynames;
-    QStringList usernames;
-    foreach (const Entry& entry, m_entryList)
-    {
-        entrynames << entry.entryname();
-        usernames << entry.username();
-    }
-    emit entryAdded(entrynames, usernames);
+    emit entryAdded();
 }
 
 } // namespace pwm

@@ -5,9 +5,10 @@
 #define ENTRYLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QStringList>
 #include <QVariant>
 #include <QDebug>
+
+#include "entrymanager.h"
 
 
 namespace pwm {
@@ -15,26 +16,27 @@ namespace pwm {
 class EntryListModel : public QAbstractListModel
 {
 public:
-    explicit EntryListModel(QObject* parent = nullptr);
+    explicit EntryListModel(EntryManager* entryManager, QObject* parent = nullptr);
     /**
-     * @brief Return number of strings in [entrynames].
-     * @note Return -1 if [entrynames] and [usernames] have different size.
+     * @brief Return number entries from entry manager's list.
      */
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     /**
-     * @brief Return index's entryname or username, depending on the role.
+     * @brief Return index's entryname or username depending on role.
+     * @param index: Index corresponding to the entry.
+     * @param role: DisplayRole or UserRole.
+     * @return entryname if Displayrole; username if UserRole.
      */
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
 public slots:
     /**
-     * @brief Update entry names and user names lists.
+     * @brief Emit datachanged signal.
      */
-    void updateLists(const QStringList& newEntrynames, const QStringList& newUsernames);
+    void updateData();
 
 private:
-    QStringList entrynames;
-    QStringList usernames;
+    EntryManager* entryManager;
 };
 
 } // namespace pwm

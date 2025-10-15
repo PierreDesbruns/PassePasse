@@ -23,11 +23,6 @@ public:
 
     QList<Entry> entryList() const { return m_entryList; }
 
-    /**
-     * @brief Return password of entry corresponding to entry and user names.
-     */
-    QString passwordOf(const QString& entryname, const QString& username);
-
 public slots:
     /**
      * @brief Generate password and add given entry to [entryList].
@@ -35,7 +30,7 @@ public slots:
     void addEntry(const QString& entryname, const QString& username, const int passwordLength, const int characterTypes);
 
 signals:
-    void entryAdded(const QStringList& entrynames, const QStringList& usernames);
+    void entryAdded();
 
 private:
     QList<Entry> m_entryList;

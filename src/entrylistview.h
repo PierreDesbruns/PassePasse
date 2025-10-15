@@ -9,6 +9,7 @@
 
 #include "entrylistmodel.h"
 #include "entrylistdelegate.h"
+#include "entrymanager.h"
 
 
 namespace pwm {
@@ -18,7 +19,7 @@ class EntryListView : public QListView
     Q_OBJECT
 
 public:
-    EntryListView(EntryListModel* entryListModel, QWidget* parent = nullptr);
+    EntryListView(EntryListModel* entryListModel, EntryManager* entryManager, QWidget* parent = nullptr);
 
 public slots:
     /**
@@ -31,7 +32,10 @@ signals:
      * @brief Emitted when an entry is selected.
      * @param entryname, username: Entry and user names of selected entry.
      */
-    void entrySelected(const QString& entryname, const QString& username);
+    void entrySelected(const Entry& entry);
+
+private:
+    EntryManager* entryManager;
 };
 
 } // namespace pwm

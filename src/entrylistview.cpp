@@ -5,8 +5,8 @@
 
 namespace pwm {
 
-EntryListView::EntryListView(EntryListModel* entryListModel, QWidget* parent)
-    : QListView{parent}
+EntryListView::EntryListView(EntryListModel* entryListModel, EntryManager* entryManager, QWidget* parent)
+    : QListView{parent}, entryManager(entryManager)
 {
     setModel(entryListModel);
     setItemDelegate(new EntryListDelegate(this));
@@ -16,7 +16,7 @@ EntryListView::EntryListView(EntryListModel* entryListModel, QWidget* parent)
 
 void EntryListView::triggerEntrySelected(const QModelIndex& index)
 {
-    emit entrySelected(index.data(Qt::DisplayRole).toString(), index.data(Qt::UserRole).toString());
+    emit entrySelected(entryManager->entryList().at(index.row()));
 }
 
 } // namespace pwm

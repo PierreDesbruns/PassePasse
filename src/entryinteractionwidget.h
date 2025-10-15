@@ -45,7 +45,7 @@ public slots:
      * @param entryname, username: Entry info to be displayed.
      * Trigger updateDisplay().
      */
-    void displayEntry(const QString& entryname, const QString& username);
+    void displayEntry(const Entry& entry);
     /**
      * @brief Cancel add or reset action and set display mode to entry info.
      */

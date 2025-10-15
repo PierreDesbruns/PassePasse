@@ -66,12 +66,12 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(cancel()));
 }
 
-void EntryInteractionWidget::displayEntry(const QString& entryname, const QString& username)
+void EntryInteractionWidget::displayEntry(const Entry& entry)
 {
     setDisplayMode(EntryInfo);
-    entrynameLine->setText(entryname);
-    usernameLine->setText(username);
-    passwordLine->setText(entryManager->passwordOf(entryname, username));
+    entrynameLine->setText(entry.entryname());
+    usernameLine->setText(entry.username());
+    passwordLine->setText(entry.password());
     passwordLine->setEchoMode(QLineEdit::Password);
 }
 
