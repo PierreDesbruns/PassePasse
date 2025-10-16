@@ -20,8 +20,8 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     QFont font = painter->font();
 
     // Texts
-    QString entryname = index.data(Qt::DisplayRole).toString();
-    QString username = index.data(Qt::UserRole).toString();
+    QString entryname = index.data().value<Entry>().entryname();
+    QString username = index.data().value<Entry>().username();
 
     // Rectangles
     QRect iconRect(option.rect.left(), option.rect.top(), 40, option.rect.height());

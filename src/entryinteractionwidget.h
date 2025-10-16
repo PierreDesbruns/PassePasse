@@ -64,6 +64,7 @@ private slots:
 
 signals:
     void displayModeChanged(const DisplayMode newDisplayMode);
+    void addEntryConfirmed(const Entry& entry);
 
 private:
     // Attributes

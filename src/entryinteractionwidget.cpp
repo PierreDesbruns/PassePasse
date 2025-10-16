@@ -94,8 +94,28 @@ void EntryInteractionWidget::confirm()
     // Requesting entry manager after verifications
     if (m_displayMode == AddEntry)
     {
-        if (!entryname.isEmpty() && !username.isEmpty() && characterTypes)
-            entryManager->addEntry(entryname, username, passwordLength, characterTypes);
+        if (entryname.isEmpty())
+        {
+            qWarning() << "EntryInteractionWidget: Entry name is empty. Did not emit add signal.";
+            return;
+        }
+        if (username.isEmpty())
+        {
+            qWarning() << "EntryInteractionWidget: User name is empty. Did not emit add signal.";
+            return;
+        }
+        if (passwordLength < 1)
+        {
+            qWarning() << "EntryInteractionWidget: Pasword length is too small. Did not emit add signal.";
+            return;
+        }
+        if (!characterTypes)
+        {
+            qWarning() << "EntryInteractionWidget: Charater types format not recognized. Did not emit add signal.";
+            return;
+        }
+
+        emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
     }
 
     // Resetting display

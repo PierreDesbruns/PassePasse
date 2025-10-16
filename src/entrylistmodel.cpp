@@ -16,21 +16,17 @@ int EntryListModel::rowCount(const QModelIndex& /*parent*/) const
     return entryManager->entryList().size();
 }
 
-QVariant EntryListModel::data(const QModelIndex& index, int role) const
+QVariant EntryListModel::data(const QModelIndex& index, int /*role*/) const
 {
-    if (!index.isValid())
-        return QVariant("");
+    QVariant data;
 
-    if (index.row() >= entryManager->entryList().size())
-        return QVariant("");
+    if (index.isValid())
+    {
+        if (index.row() < entryManager->entryList().size())
+            data.setValue(entryManager->entryList().at(index.row()));
+    }
 
-    if (role == Qt::DisplayRole)
-        return entryManager->entryList().at(index.row()).entryname();
-
-    if (role == Qt::UserRole)
-        return entryManager->entryList().at(index.row()).username();
-
-    return QVariant("");
+    return data;
 }
 
 void EntryListModel::updateData()

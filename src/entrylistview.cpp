@@ -16,7 +16,7 @@ EntryListView::EntryListView(EntryListModel* entryListModel, EntryManager* entry
 
 void EntryListView::triggerEntrySelected(const QModelIndex& index)
 {
-    emit entrySelected(entryManager->entryList().at(index.row()));
+    emit entrySelected(index.data().value<Entry>());
 }
 
 } // namespace pwm

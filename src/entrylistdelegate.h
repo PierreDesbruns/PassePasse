@@ -7,6 +7,8 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 
+#include "entry.h"
+
 
 namespace pwm {
 

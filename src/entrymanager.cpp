@@ -8,45 +8,23 @@ EntryManager::EntryManager(QObject* parent)
 
 }
 
-void EntryManager::addEntry(const QString &entryname, const QString &username, const int passwordLength, const int characterTypes)
+void EntryManager::addEntry(const Entry &entry)
 {
-    Entry testEntry(entryname, username);
-
     // Verifications
-    if (m_entryList.contains(testEntry))
+    if (m_entryList.contains(entry))
     {
-        qWarning() << "Entry Manager: Did not add entry because entry already exists.";
-        return;
-    }
-    if (passwordLength < 1)
-    {
-        qWarning() << "Entry Manager: Did not add entry because password is too short.";
-        return;
-    }
-    if ((characterTypes < 0) || (characterTypes > 15))
-    {
-        qWarning() << "Entry Manager: Did not add entry because character types are wrong.";
+        qWarning() << "Entry Manager: Entry already exists. Did not add entry.";
         return;
     }
 
-    // Password generation
-    bool hasLowCase = ((characterTypes & 0b1000) != 0);
-    bool hasUpCase = ((characterTypes & 0b0100) != 0);
-    bool hasNumbers = ((characterTypes & 0b0010) != 0);
-    bool hasSpecials = ((characterTypes & 0b0001) != 0);
-    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
-
-    if (password.isEmpty())
+    if (entry.password().isEmpty())
     {
-        qWarning() << "Entry Manager: An error occured during password generation. No password has been generated.";
+        qWarning() << "Entry: Generated password is empty. Did not add entry.";
         return;
     }
-
-    // Date generation
-    QString date = QDate::currentDate().toString("yyyy.MM.dd");
 
     // Entry list update
-    m_entryList << Entry(entryname, username, password, date);
+    m_entryList << entry;
 
     // entryAdded signal
     emit entryAdded();

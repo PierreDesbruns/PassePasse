@@ -27,7 +27,7 @@ public slots:
     /**
      * @brief Generate password and add given entry to [entryList].
      */
-    void addEntry(const QString& entryname, const QString& username, const int passwordLength, const int characterTypes);
+    void addEntry(const Entry& entry);
 
 signals:
     void entryAdded();

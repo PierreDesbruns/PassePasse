@@ -7,6 +7,8 @@
 #include <QString>
 #include <QDate>
 
+#include "pwmsecurity.h"
+
 
 namespace pwm {
 
@@ -20,17 +22,18 @@ public:
 
     Entry(const QString& entryname, const QString& username);
     Entry(const QString& entryname, const QString& username, const QString& password, const QString& date);
+    Entry(const QString& entryname, const QString& username, const int passwordLength, const int characterTypes);
 
     bool operator==(const Entry& other) const;
 
     QString entryname() const;
-    void setEntryname(const QString& newEntryname);
+    void setEntryname(const QString& entryname);
 
     QString username() const;
-    void setUsername(const QString& newUsername);
+    void setUsername(const QString& username);
 
     QString password() const;
-    void setPassword(const QString& newPassword);
+    void setPassword(const int passwordLength, const int characterTypes);
 
     QString date() const;
 
