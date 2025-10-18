@@ -8,7 +8,7 @@ EntryManager::EntryManager(QObject* parent)
 
 }
 
-void EntryManager::addEntry(const Entry &entry)
+void EntryManager::addEntry(const Entry& entry)
 {
     // Verifications
     if (m_entryList.contains(entry))
@@ -19,15 +19,37 @@ void EntryManager::addEntry(const Entry &entry)
 
     if (entry.password().isEmpty())
     {
-        qWarning() << "Entry: Generated password is empty. Did not add entry.";
+        qWarning() << "Entry Manager: Generated password is empty. Did not add entry.";
         return;
     }
 
     // Entry list update
     m_entryList << entry;
 
-    // entryAdded signal
     emit entryAdded();
+}
+
+void EntryManager::resetEntry(const Entry& entry)
+{
+    // Searching for given entry
+    int entryIndex = m_entryList.indexOf(entry);
+    if (entryIndex == -1)
+    {
+        qWarning() << "Entry Manager: Entry not found. Did not reset entry.";
+        return;
+    }
+
+    // Checking for error in password generation
+    if (entry.password().isEmpty())
+    {
+        qWarning() << "Entry Manager: Generated password is empty. Did not reset entry.";
+        return;
+    }
+
+    // Replacing entry
+    m_entryList.replace(entryIndex, entry);
+
+    emit entryReset();
 }
 
 } // namespace pwm

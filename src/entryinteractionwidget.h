@@ -38,8 +38,14 @@ public:
     }
 
 public slots:
-    void triggerAddMode() { setDisplayMode(AddEntry); }
-    void triggerResetMode() { setDisplayMode(ResetPassword); }
+    /**
+     * @brief Change display to AddEntry.
+     */
+    void triggerAddMode();
+    /**
+     * @brief Change display to ResetPassword.
+     */
+    void triggerResetMode();
     /**
      * @brief Setter of [entryname], [username], and [password].
      * @param entryname, username: Entry info to be displayed.
@@ -60,11 +66,23 @@ private slots:
      * @brief Manage display according to the display mode.
      */
     void updateDisplay(DisplayMode displayMode);
+    /**
+     * @brief Show/Hide password.
+     */
     void reversePasswordEchoMode();
 
 signals:
     void displayModeChanged(const DisplayMode newDisplayMode);
+    /**
+     * @brief Emitted when an entry add is confirmed.
+     * @param entry: Entry be added.
+     */
     void addEntryConfirmed(const Entry& entry);
+    /**
+     * @brief Emitted when an entry's password reset is confirmed.
+     * @param entry: Entry with new password.
+     */
+    void resEntryConfirmed(const Entry& entry);
 
 private:
     // Attributes

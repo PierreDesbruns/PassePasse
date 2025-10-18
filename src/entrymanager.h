@@ -25,12 +25,17 @@ public:
 
 public slots:
     /**
-     * @brief Generate password and add given entry to [entryList].
+     * @brief Add given entry to entry list.
      */
     void addEntry(const Entry& entry);
+    /**
+     * @brief Reset password of an entry by replacing it by given entry.
+     */
+    void resetEntry(const Entry& entry);
 
 signals:
     void entryAdded();
+    void entryReset();
 
 private:
     QList<Entry> m_entryList;

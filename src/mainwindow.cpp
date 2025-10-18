@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent)
 //    connect(entryManager, SIGNAL(entryAdded(QStringList,QStringList)), entryListModel, SLOT(updateLists(QStringList,QStringList)));
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryInteractionWidget, SIGNAL(addEntryConfirmed(Entry)), entryManager, SLOT(addEntry(Entry)));
+    connect(entryInteractionWidget, SIGNAL(resEntryConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));
 //    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
 //    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
 //    // Windows opening

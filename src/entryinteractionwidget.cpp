@@ -66,6 +66,18 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(cancel()));
 }
 
+void EntryInteractionWidget::triggerAddMode()
+{
+    setDisplayMode(AddEntry);
+}
+
+void EntryInteractionWidget::triggerResetMode()
+{
+    // Triggers only if an entry is selected
+    if (!passwordLine->text().isEmpty())
+        setDisplayMode(ResetPassword);
+}
+
 void EntryInteractionWidget::displayEntry(const Entry& entry)
 {
     setDisplayMode(EntryInfo);
@@ -111,11 +123,26 @@ void EntryInteractionWidget::confirm()
         }
         if (!characterTypes)
         {
-            qWarning() << "EntryInteractionWidget: Charater types format not recognized. Did not emit add signal.";
+            qWarning() << "EntryInteractionWidget: No characters selected. Did not emit add signal.";
             return;
         }
 
         emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
+    }
+    else if (m_displayMode == ResetPassword)
+    {
+        if (passwordLength < 1)
+        {
+            qWarning() << "EntryInteractionWidget: Pasword length is too small. Did not emit reset signal.";
+            return;
+        }
+        if (!characterTypes)
+        {
+            qWarning() << "EntryInteractionWidget: No characters selected. Did not emit reset signal.";
+            return;
+        }
+
+        emit resEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
     }
 
     // Resetting display
