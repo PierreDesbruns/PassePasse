@@ -52,4 +52,32 @@ void EntryManager::resetEntry(const Entry& entry)
     emit entryReset();
 }
 
+void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
+{
+    // Searching for original entry
+    int entryIndex = m_entryList.indexOf(oldEntry);
+    if (entryIndex == -1)
+    {
+        qWarning() << "Entry Manager: Entry not found. Did not edit entry.";
+        return;
+    }
+
+    // Checking potential doubles
+    if (m_entryList.contains(newEntry))
+    {
+        qWarning() << "Entry Manager: Given entry already exists. Did not edit entry.";
+        return;
+    }
+
+    // Replacing entry
+    Entry entry = m_entryList.at(entryIndex);
+    if (!newEntry.entryname().isEmpty())
+        entry.setEntryname(newEntry.entryname());
+    if (!newEntry.username().isEmpty())
+        entry.setUsername(newEntry.username());
+    m_entryList.replace(entryIndex, entry);
+
+    emit entryEdited();
+}
+
 } // namespace pwm

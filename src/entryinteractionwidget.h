@@ -26,7 +26,7 @@ class EntryInteractionWidget : public QWidget
 public:
     explicit EntryInteractionWidget(EntryManager* entryManager, QWidget* parent = nullptr);
 
-    enum DisplayMode { EntryInfo, AddEntry, ResetPassword };
+    enum DisplayMode { EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword };
 
     DisplayMode displayMode() const { return m_displayMode; }
     void setDisplayMode(DisplayMode displayMode)
@@ -39,13 +39,21 @@ public:
 
 public slots:
     /**
-     * @brief Change display to AddEntry.
+     * @brief Change display mode to AddEntry.
      */
-    void triggerAddMode();
+    void triggerAddEntryMode();
     /**
-     * @brief Change display to ResetPassword.
+     * @brief Change display mode to EditEntryname.
      */
-    void triggerResetMode();
+    void triggerEditEntrynameMode();
+    /**
+     * @brief Change display mode to EditUsername.
+     */
+    void triggerEditUsernameMode();
+    /**
+     * @brief Change display mode to EditPassword.
+     */
+    void triggerEditPasswordMode();
     /**
      * @brief Setter of [entryname], [username], and [password].
      * @param entryname, username: Entry info to be displayed.
@@ -57,7 +65,7 @@ public slots:
      */
     void cancel();
     /**
-     * @brief Confirm add or reset action and set display mode to entry info.
+     * @brief Confirm add or edit action and set display mode to entry info.
      */
     void confirm();
 
@@ -74,15 +82,27 @@ private slots:
 signals:
     void displayModeChanged(const DisplayMode newDisplayMode);
     /**
-     * @brief Emitted when an entry add is confirmed.
+     * @brief Emitted when an entry addition is confirmed.
      * @param entry: Entry be added.
      */
     void addEntryConfirmed(const Entry& entry);
     /**
-     * @brief Emitted when an entry's password reset is confirmed.
+     * @brief Emitted when a password edition is confirmed.
      * @param entry: Entry with new password.
      */
-    void resEntryConfirmed(const Entry& entry);
+    void editPasswordConfirmed(const Entry& entry);
+    /**
+     * @brief Emitted when an entry name edition is confirmed.
+     * @param newEntry: Entry with new entry name.
+     * @param oldEntry: Entry to be replaced.
+     */
+    void editEntrynameConfirmed(const Entry& newEntry, const Entry& oldEntry);
+    /**
+     * @brief Emitted when a user name edition is confirmed.
+     * @param newEntry: ENtry with new user name.
+     * @param oldEntry: Entry to be replaced.
+     */
+    void editUsernameConfirmed(const Entry& newEntry, const Entry& oldEntry);
 
 private:
     // Attributes

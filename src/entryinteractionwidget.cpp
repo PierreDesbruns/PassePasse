@@ -61,21 +61,51 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     // Slots / signals
     connect(this, SIGNAL(displayModeChanged(DisplayMode)), this, SLOT(updateDisplay(DisplayMode)));
     connect(seePasswordButton, SIGNAL(pressed()), this, SLOT(reversePasswordEchoMode()));
-    connect(editPasswordButton, SIGNAL(pressed()), this, SLOT(triggerResetMode()));
+    connect(editEntrynameButton, SIGNAL(pressed()), this, SLOT(triggerEditEntrynameMode()));
+    connect(editUsernameButton, SIGNAL(pressed()), this, SLOT(triggerEditUsernameMode()));
+    connect(editPasswordButton, SIGNAL(pressed()), this, SLOT(triggerEditPasswordMode()));
     connect(confirmButton, SIGNAL(pressed()), this, SLOT(confirm()));
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(cancel()));
 }
 
-void EntryInteractionWidget::triggerAddMode()
+void EntryInteractionWidget::triggerAddEntryMode()
 {
     setDisplayMode(AddEntry);
 }
 
-void EntryInteractionWidget::triggerResetMode()
+void EntryInteractionWidget::triggerEditEntrynameMode()
 {
-    // Triggers only if an entry is selected
+    if (m_displayMode == EditEntryname)
+    {
+        confirm();
+        entrynameLine->setPlaceholderText("");
+    }
+    else
+    {
+        entrynameLine->setPlaceholderText(entrynameLine->text());
+        setDisplayMode(EditEntryname);
+    }
+}
+
+void EntryInteractionWidget::triggerEditUsernameMode()
+{
+    if (m_displayMode == EditUsername)
+    {
+        confirm();
+        usernameLine->setPlaceholderText("");
+    }
+    else
+    {
+        usernameLine->setPlaceholderText(usernameLine->text());
+        setDisplayMode(EditUsername);
+    }
+}
+
+void EntryInteractionWidget::triggerEditPasswordMode()
+{
+    // Trigger only if an entry is selected
     if (!passwordLine->text().isEmpty())
-        setDisplayMode(ResetPassword);
+        setDisplayMode(EditPassword);
 }
 
 void EntryInteractionWidget::displayEntry(const Entry& entry)
@@ -90,9 +120,6 @@ void EntryInteractionWidget::displayEntry(const Entry& entry)
 void EntryInteractionWidget::cancel()
 {
     setDisplayMode(EntryInfo);
-    entrynameLine->clear();
-    usernameLine->clear();
-    passwordLine->clear();
 }
 
 void EntryInteractionWidget::confirm()
@@ -104,8 +131,9 @@ void EntryInteractionWidget::confirm()
     int characterTypes = charTypesWidget->checkedBoxes();
 
     // Requesting entry manager after verifications
-    if (m_displayMode == AddEntry)
+    switch (m_displayMode)
     {
+    case AddEntry:
         if (entryname.isEmpty())
         {
             qWarning() << "EntryInteractionWidget: Entry name is empty. Did not emit add signal.";
@@ -126,11 +154,18 @@ void EntryInteractionWidget::confirm()
             qWarning() << "EntryInteractionWidget: No characters selected. Did not emit add signal.";
             return;
         }
-
         emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
-    }
-    else if (m_displayMode == ResetPassword)
-    {
+        break;
+
+    case EditEntryname:
+        emit editEntrynameConfirmed(Entry(entryname, username), Entry(entrynameLine->placeholderText(), username));
+        break;
+
+    case EditUsername:
+        emit editUsernameConfirmed(Entry(entryname, username), Entry(entryname, usernameLine->placeholderText()));
+        break;
+
+    case EditPassword:
         if (passwordLength < 1)
         {
             qWarning() << "EntryInteractionWidget: Pasword length is too small. Did not emit reset signal.";
@@ -141,8 +176,10 @@ void EntryInteractionWidget::confirm()
             qWarning() << "EntryInteractionWidget: No characters selected. Did not emit reset signal.";
             return;
         }
+        emit editPasswordConfirmed(Entry(entryname, username, passwordLength, characterTypes));
+        break;
 
-        emit resEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
+    default: break;
     }
 
     // Resetting display
@@ -157,38 +194,88 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
     switch (displayMode)
     {
     case EntryInfo:
+        // Lines
         entrynameLine->setReadOnly(true);
         usernameLine->setReadOnly(true);
         passwordLine->setEchoMode(QLineEdit::Password);
-        pwdLengthSlider->hide();
+        // Hidden widgets
         pwdLengthSlider->clear();
+        pwdLengthSlider->hide();
         charTypesWidget->hide();
         cancelButton->hide();
         confirmButton->hide();
+        // Enabled buttons
+        editEntrynameButton->setEnabled(true);
+        editUsernameButton->setEnabled(true);
+        editPasswordButton->setEnabled(true);
+        copyUsernameButton->setEnabled(true);
+        copyPasswordButton->setEnabled(true);
+        seePasswordButton->setEnabled(true);
         break;
     case AddEntry:
+        // Lines
         entrynameLine->clear();
         usernameLine->clear();
         passwordLine->clear();
         entrynameLine->setReadOnly(false);
         usernameLine->setReadOnly(false);
-        pwdLengthSlider->show();
+        passwordLine->setEchoMode(QLineEdit::Password);
+        // Hidden widgets
         pwdLengthSlider->clear();
-        charTypesWidget->show();
         charTypesWidget->clear();
+        pwdLengthSlider->show();
+        charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
+        // Enabled buttons
+        editEntrynameButton->setEnabled(false);
+        editUsernameButton->setEnabled(false);
+        editPasswordButton->setEnabled(false);
+        copyUsernameButton->setEnabled(false);
+        copyPasswordButton->setEnabled(false);
+        seePasswordButton->setEnabled(false);
         break;
-    case ResetPassword:
+    case EditEntryname:
+        // Lines
+        entrynameLine->setReadOnly(false);
+        // Enabled buttons
+        editEntrynameButton->setEnabled(true);
+        editUsernameButton->setEnabled(false);
+        editPasswordButton->setEnabled(false);
+        copyUsernameButton->setEnabled(false);
+        copyPasswordButton->setEnabled(false);
+        seePasswordButton->setEnabled(false);
+        break;
+    case EditUsername:
+        // Lines
+        usernameLine->setReadOnly(false);
+        // Enabled buttons
+        editEntrynameButton->setEnabled(false);
+        editUsernameButton->setEnabled(true);
+        editPasswordButton->setEnabled(false);
+        copyUsernameButton->setEnabled(false);
+        copyPasswordButton->setEnabled(false);
+        seePasswordButton->setEnabled(false);
+        break;
+    case EditPassword:
+        // Lines
         entrynameLine->setReadOnly(true);
         usernameLine->setReadOnly(true);
         passwordLine->setEchoMode(QLineEdit::Password);
-        pwdLengthSlider->show();
+        // Hidden widgets
         pwdLengthSlider->setValue(passwordLine->text().size());
-        charTypesWidget->show();
         charTypesWidget->clear();
+        pwdLengthSlider->show();
+        charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
+        // Enabled buttons
+        editEntrynameButton->setEnabled(false);
+        editUsernameButton->setEnabled(false);
+        editPasswordButton->setEnabled(false);
+        copyUsernameButton->setEnabled(false);
+        copyPasswordButton->setEnabled(false);
+        seePasswordButton->setEnabled(false);
         break;
     default: break;
     }
