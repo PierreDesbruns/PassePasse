@@ -9,17 +9,12 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     : QWidget{parent}, entryManager(entryManager), m_displayMode(EntryInfo)
 {
     // Labels
+    displayModeLabel = new QLabel();
     entrynameLabel = new QLabel(QString(tr("Nom de l'entrée")));
     usernameLabel = new QLabel(QString(tr("Nom d'utilisateur")));
     passwordLabel = new QLabel(QString(tr("Mot de passe")));
 
     // Buttons
-    editEntrynameButton = new QPushButton(QString(tr("Modifier")));
-    editUsernameButton = new QPushButton(QString(tr("Modifier")));
-    editPasswordButton = new QPushButton(QString(tr("Modifier")));
-    copyUsernameButton = new QPushButton(QString(tr("Copier")));
-    copyPasswordButton = new QPushButton(QString(tr("Copier")));
-    seePasswordButton = new QPushButton(QString(tr("Voir")));
     confirmButton = new QPushButton(QString(tr("Valider")));
     cancelButton = new QPushButton(QString(tr("Annuler")));
 
@@ -29,6 +24,14 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     passwordLine = new QLineEdit();
     passwordLine->setReadOnly(true);
 
+    // Line edit actions
+    editEntrynameAction = entrynameLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
+    editUsernameAction = usernameLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
+    copyUsernameAction = usernameLine->addAction(QIcon(":/copy"), QLineEdit::TrailingPosition);
+    editPasswordAction = passwordLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
+    copyPasswordAction = passwordLine->addAction(QIcon(":/copy"), QLineEdit::TrailingPosition);
+    seePasswordAction = passwordLine->addAction(QIcon(":/see"), QLineEdit::TrailingPosition);
+
     // Password slider
     pwdLengthSlider = new PasswordLengthSlider(60);
 
@@ -36,34 +39,29 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     charTypesWidget = new CharacterTypesWidget();
 
     // Layout
-    mainLayout = new QGridLayout(this);
+    mainLayout = new QVBoxLayout(this);
     mainLayout->setAlignment(Qt::AlignTop);
-    mainLayout->addWidget(entrynameLabel, 0, 0, Qt::AlignLeft);
-    mainLayout->addWidget(editEntrynameButton, 0, 3);
-    mainLayout->addWidget(entrynameLine, 1, 0, 1, 4, Qt::AlignTop);
-    mainLayout->addWidget(usernameLabel, 2, 0, Qt::AlignLeft);
-    mainLayout->addWidget(copyUsernameButton, 2, 2);
-    mainLayout->addWidget(editUsernameButton, 2, 3);
-    mainLayout->addWidget(usernameLine, 3, 0, 1, 4, Qt::AlignTop);
-    mainLayout->addWidget(passwordLabel, 4, 0, Qt::AlignLeft);
-    mainLayout->addWidget(seePasswordButton, 4, 1);
-    mainLayout->addWidget(copyPasswordButton, 4, 2);
-    mainLayout->addWidget(editPasswordButton, 4, 3);
-    mainLayout->addWidget(passwordLine, 5, 0, 1, 4, Qt::AlignTop);
-    mainLayout->addWidget(pwdLengthSlider, 6, 0, 1, 4);
-    mainLayout->addWidget(charTypesWidget, 7, 0, 1, 4);
-    mainLayout->addWidget(cancelButton, 8, 0, 1, 2);
-    mainLayout->addWidget(confirmButton, 8, 2, 1, 2);
+    mainLayout->addWidget(displayModeLabel);
+    mainLayout->addWidget(entrynameLabel);
+    mainLayout->addWidget(entrynameLine);
+    mainLayout->addWidget(usernameLabel);
+    mainLayout->addWidget(usernameLine);
+    mainLayout->addWidget(passwordLabel);
+    mainLayout->addWidget(passwordLine);
+    mainLayout->addWidget(pwdLengthSlider);
+    mainLayout->addWidget(charTypesWidget);
+    mainLayout->addWidget(cancelButton);
+    mainLayout->addWidget(confirmButton);
 
     // Initializations
     updateDisplay(EntryInfo);
 
     // Slots / signals
     connect(this, SIGNAL(displayModeChanged(DisplayMode)), this, SLOT(updateDisplay(DisplayMode)));
-    connect(seePasswordButton, SIGNAL(pressed()), this, SLOT(reversePasswordEchoMode()));
-    connect(editEntrynameButton, SIGNAL(pressed()), this, SLOT(triggerEditEntrynameMode()));
-    connect(editUsernameButton, SIGNAL(pressed()), this, SLOT(triggerEditUsernameMode()));
-    connect(editPasswordButton, SIGNAL(pressed()), this, SLOT(triggerEditPasswordMode()));
+    connect(seePasswordAction, SIGNAL(triggered(bool)), this, SLOT(reversePasswordEchoMode()));
+    connect(editEntrynameAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditEntrynameMode()));
+    connect(editUsernameAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditUsernameMode()));
+    connect(editPasswordAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditPasswordMode()));
     connect(confirmButton, SIGNAL(pressed()), this, SLOT(confirm()));
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(cancel()));
 }
@@ -194,6 +192,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
     switch (displayMode)
     {
     case EntryInfo:
+        displayModeLabel->setText(QString(tr("INFORMATION SUR L'ENTREE")));
         // Lines
         entrynameLine->setReadOnly(true);
         usernameLine->setReadOnly(true);
@@ -205,14 +204,15 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         cancelButton->hide();
         confirmButton->hide();
         // Enabled buttons
-        editEntrynameButton->setEnabled(true);
-        editUsernameButton->setEnabled(true);
-        editPasswordButton->setEnabled(true);
-        copyUsernameButton->setEnabled(true);
-        copyPasswordButton->setEnabled(true);
-        seePasswordButton->setEnabled(true);
+        editEntrynameAction->setEnabled(true);
+        editUsernameAction->setEnabled(true);
+        editPasswordAction->setEnabled(true);
+        copyUsernameAction->setEnabled(true);
+        copyPasswordAction->setEnabled(true);
+        seePasswordAction->setEnabled(true);
         break;
     case AddEntry:
+        displayModeLabel->setText(QString(tr("AJOUTER UNE ENTREE")));
         // Lines
         entrynameLine->clear();
         usernameLine->clear();
@@ -228,36 +228,39 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         cancelButton->show();
         confirmButton->show();
         // Enabled buttons
-        editEntrynameButton->setEnabled(false);
-        editUsernameButton->setEnabled(false);
-        editPasswordButton->setEnabled(false);
-        copyUsernameButton->setEnabled(false);
-        copyPasswordButton->setEnabled(false);
-        seePasswordButton->setEnabled(false);
+        editEntrynameAction->setEnabled(false);
+        editUsernameAction->setEnabled(false);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
         break;
     case EditEntryname:
+        displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'ENTREE")));
         // Lines
         entrynameLine->setReadOnly(false);
         // Enabled buttons
-        editEntrynameButton->setEnabled(true);
-        editUsernameButton->setEnabled(false);
-        editPasswordButton->setEnabled(false);
-        copyUsernameButton->setEnabled(false);
-        copyPasswordButton->setEnabled(false);
-        seePasswordButton->setEnabled(false);
+        editEntrynameAction->setEnabled(true);
+        editUsernameAction->setEnabled(false);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
         break;
     case EditUsername:
+        displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'UTILISATEUR")));
         // Lines
         usernameLine->setReadOnly(false);
         // Enabled buttons
-        editEntrynameButton->setEnabled(false);
-        editUsernameButton->setEnabled(true);
-        editPasswordButton->setEnabled(false);
-        copyUsernameButton->setEnabled(false);
-        copyPasswordButton->setEnabled(false);
-        seePasswordButton->setEnabled(false);
+        editEntrynameAction->setEnabled(false);
+        editUsernameAction->setEnabled(true);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
         break;
     case EditPassword:
+        displayModeLabel->setText(QString(tr("MODIFIER LE MOT DE PASSE")));
         // Lines
         entrynameLine->setReadOnly(true);
         usernameLine->setReadOnly(true);
@@ -270,12 +273,12 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         cancelButton->show();
         confirmButton->show();
         // Enabled buttons
-        editEntrynameButton->setEnabled(false);
-        editUsernameButton->setEnabled(false);
-        editPasswordButton->setEnabled(false);
-        copyUsernameButton->setEnabled(false);
-        copyPasswordButton->setEnabled(false);
-        seePasswordButton->setEnabled(false);
+        editEntrynameAction->setEnabled(false);
+        editUsernameAction->setEnabled(false);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
         break;
     default: break;
     }

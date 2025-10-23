@@ -5,11 +5,13 @@
 #define ENTRYINTERACTIONWIDGET_H
 
 #include <QWidget>
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QString>
+#include <QAction>
+#include <QIcon>
 
 #include "charactertypeswidget.h"
 #include "passwordlengthslider.h"
@@ -111,8 +113,9 @@ private:
     EntryManager* entryManager;
 
     // Widgets
-    QGridLayout* mainLayout;
+    QVBoxLayout* mainLayout;
 
+    QLabel* displayModeLabel;
     QLabel* entrynameLabel;
     QLabel* usernameLabel;
     QLabel* passwordLabel;
@@ -121,12 +124,13 @@ private:
     QLineEdit* usernameLine;
     QLineEdit* passwordLine;
 
-    QPushButton* editEntrynameButton;
-    QPushButton* editUsernameButton;
-    QPushButton* editPasswordButton;
-    QPushButton* copyUsernameButton;
-    QPushButton* copyPasswordButton;
-    QPushButton* seePasswordButton;
+    QAction* editEntrynameAction;
+    QAction* editUsernameAction;
+    QAction* editPasswordAction;
+    QAction* copyUsernameAction;
+    QAction* copyPasswordAction;
+    QAction* seePasswordAction;
+
     QPushButton* confirmButton;
     QPushButton* cancelButton;
 
