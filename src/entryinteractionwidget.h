@@ -28,7 +28,7 @@ class EntryInteractionWidget : public QWidget
 public:
     explicit EntryInteractionWidget(EntryManager* entryManager, QWidget* parent = nullptr);
 
-    enum DisplayMode { EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword };
+    enum DisplayMode { EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword, DeleteEntry };
 
     DisplayMode displayMode() const { return m_displayMode; }
     void setDisplayMode(DisplayMode displayMode)
@@ -57,9 +57,11 @@ public slots:
      */
     void triggerEditPasswordMode();
     /**
-     * @brief Setter of [entryname], [username], and [password].
-     * @param entryname, username: Entry info to be displayed.
-     * Trigger updateDisplay().
+     * @brief Change display mode to DeleteEntry.
+     */
+    void triggerDeleteEntryMode();
+    /**
+     * @brief DIsplay given entry's information inside widgets.
      */
     void displayEntry(const Entry& entry);
     /**
@@ -88,6 +90,11 @@ signals:
      * @param entry: Entry be added.
      */
     void addEntryConfirmed(const Entry& entry);
+    /**
+     * @brief Emitted when an entry deletion is confirmed.
+     * @param entry: Entry to be deleted.
+     */
+    void deleteEntryConfirmed(const Entry& entry);
     /**
      * @brief Emitted when a password edition is confirmed.
      * @param entry: Entry with new password.

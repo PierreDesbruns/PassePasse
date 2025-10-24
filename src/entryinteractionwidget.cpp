@@ -68,6 +68,9 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
 
 void EntryInteractionWidget::triggerAddEntryMode()
 {
+    if (m_displayMode != EntryInfo)
+        return;
+
     setDisplayMode(AddEntry);
 }
 
@@ -78,7 +81,7 @@ void EntryInteractionWidget::triggerEditEntrynameMode()
         confirm();
         entrynameLine->setPlaceholderText("");
     }
-    else
+    else if (m_displayMode == EntryInfo)
     {
         entrynameLine->setPlaceholderText(entrynameLine->text());
         setDisplayMode(EditEntryname);
@@ -92,7 +95,7 @@ void EntryInteractionWidget::triggerEditUsernameMode()
         confirm();
         usernameLine->setPlaceholderText("");
     }
-    else
+    else if (m_displayMode == EntryInfo)
     {
         usernameLine->setPlaceholderText(usernameLine->text());
         setDisplayMode(EditUsername);
@@ -101,9 +104,22 @@ void EntryInteractionWidget::triggerEditUsernameMode()
 
 void EntryInteractionWidget::triggerEditPasswordMode()
 {
-    // Trigger only if an entry is selected
-    if (!passwordLine->text().isEmpty())
-        setDisplayMode(EditPassword);
+    if (m_displayMode != EntryInfo)
+        return;
+    if (passwordLine->text().isEmpty())
+        return;
+
+    setDisplayMode(EditPassword);
+}
+
+void EntryInteractionWidget::triggerDeleteEntryMode()
+{
+    if (m_displayMode != EntryInfo)
+        return;
+    if (entrynameLine->text().isEmpty())
+        return;
+
+    setDisplayMode(DeleteEntry);
 }
 
 void EntryInteractionWidget::displayEntry(const Entry& entry)
@@ -177,6 +193,10 @@ void EntryInteractionWidget::confirm()
         emit editPasswordConfirmed(Entry(entryname, username, passwordLength, characterTypes));
         break;
 
+    case DeleteEntry:
+        emit deleteEntryConfirmed(Entry(entryname, username));
+        break;
+
     default: break;
     }
 
@@ -211,6 +231,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         copyPasswordAction->setEnabled(true);
         seePasswordAction->setEnabled(true);
         break;
+
     case AddEntry:
         displayModeLabel->setText(QString(tr("AJOUTER UNE ENTREE")));
         // Lines
@@ -235,6 +256,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         copyPasswordAction->setEnabled(false);
         seePasswordAction->setEnabled(false);
         break;
+
     case EditEntryname:
         displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'ENTREE")));
         // Lines
@@ -247,6 +269,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         copyPasswordAction->setEnabled(false);
         seePasswordAction->setEnabled(false);
         break;
+
     case EditUsername:
         displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'UTILISATEUR")));
         // Lines
@@ -259,6 +282,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         copyPasswordAction->setEnabled(false);
         seePasswordAction->setEnabled(false);
         break;
+
     case EditPassword:
         displayModeLabel->setText(QString(tr("MODIFIER LE MOT DE PASSE")));
         // Lines
@@ -280,6 +304,21 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         copyPasswordAction->setEnabled(false);
         seePasswordAction->setEnabled(false);
         break;
+
+    case DeleteEntry:
+        displayModeLabel->setText(QString(tr("SUPPRIMER UNE ENTREE")));
+        // Hidden widgets
+        cancelButton->show();
+        confirmButton->show();
+        // Enabled buttons
+        editEntrynameAction->setEnabled(false);
+        editUsernameAction->setEnabled(false);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
+        break;
+
     default: break;
     }
 }

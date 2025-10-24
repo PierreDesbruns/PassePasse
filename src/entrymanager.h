@@ -29,6 +29,10 @@ public slots:
      */
     void addEntry(const Entry& entry);
     /**
+     * @brief Delete given entry from entry list.
+     */
+    void delEntry(const Entry& entry);
+    /**
      * @brief Reset password of an entry by replacing it by given entry.
      */
     void resetEntry(const Entry& entry);
@@ -41,6 +45,7 @@ public slots:
 
 signals:
     void entryAdded();
+    void entryDeleted();
     void entryReset();
     void entryEdited();
 

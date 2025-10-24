@@ -5,7 +5,7 @@
 
 namespace pwm {
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
 //    setFixedSize(windowSize);
@@ -90,14 +90,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Signals / slots
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddEntryMode()));
+    connect(delEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerDeleteEntryMode()));
     connect(entryManager, &EntryManager::entryAdded, entryListModel, &EntryListModel::updateData);
+    connect(entryManager, &EntryManager::entryDeleted, entryListModel, &EntryListModel::updateData);
     connect(entryManager, &EntryManager::entryEdited, entryListModel, &EntryListModel::updateData);
 //    connect(entryManager, SIGNAL(entryAdded(QStringList,QStringList)), entryListModel, SLOT(updateLists(QStringList,QStringList)));
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryInteractionWidget, SIGNAL(addEntryConfirmed(Entry)), entryManager, SLOT(addEntry(Entry)));
+    connect(entryInteractionWidget, SIGNAL(deleteEntryConfirmed(Entry)), entryManager, SLOT(delEntry(Entry)));
+    connect(entryInteractionWidget, SIGNAL(editPasswordConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));
     connect(entryInteractionWidget, SIGNAL(editEntrynameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
     connect(entryInteractionWidget, SIGNAL(editUsernameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
-    connect(entryInteractionWidget, SIGNAL(editPasswordConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));
 //    connect(addEntryButton, SIGNAL(pressed()), entryActionGroup, SLOT(show()));
 //    connect(cancelActionButton, SIGNAL(pressed()), entryActionGroup, SLOT(hide()));
 //    // Windows opening
