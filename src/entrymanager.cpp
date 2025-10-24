@@ -35,7 +35,7 @@ void EntryManager::addEntry(const Entry& entry)
     // Entry list update
     m_entryList << entry;
 
-    emit entryAdded();
+    emit entryAdded(entry);
 }
 
 void EntryManager::delEntry(const Entry &entry)
@@ -61,7 +61,7 @@ void EntryManager::delEntry(const Entry &entry)
     // Removing entry
     m_entryList.removeAt(entryIndex);
 
-    emit entryDeleted();
+    emit entryDeleted(entry);
 }
 
 void EntryManager::resetEntry(const Entry& entry)
@@ -84,7 +84,7 @@ void EntryManager::resetEntry(const Entry& entry)
     // Replacing entry
     m_entryList.replace(entryIndex, entry);
 
-    emit entryReset();
+    emit entryReset(entry);
 }
 
 void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
@@ -112,7 +112,7 @@ void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
         entry.setUsername(newEntry.username());
     m_entryList.replace(entryIndex, entry);
 
-    emit entryEdited();
+    emit entryEdited(entry);
 }
 
 } // namespace pwm

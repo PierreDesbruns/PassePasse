@@ -89,13 +89,20 @@ MainWindow::MainWindow(QWidget* parent)
     setCentralWidget(mainContent);
 
     // Signals / slots
+    // Buttons
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddEntryMode()));
     connect(delEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerDeleteEntryMode()));
+    // List model updates
     connect(entryManager, &EntryManager::entryAdded, entryListModel, &EntryListModel::updateData);
     connect(entryManager, &EntryManager::entryDeleted, entryListModel, &EntryListModel::updateData);
     connect(entryManager, &EntryManager::entryEdited, entryListModel, &EntryListModel::updateData);
-//    connect(entryManager, SIGNAL(entryAdded(QStringList,QStringList)), entryListModel, SLOT(updateLists(QStringList,QStringList)));
+    // Entry interaction widget updates
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryDeleted(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryEdited(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryReset(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    // Entry manager requests
     connect(entryInteractionWidget, SIGNAL(addEntryConfirmed(Entry)), entryManager, SLOT(addEntry(Entry)));
     connect(entryInteractionWidget, SIGNAL(deleteEntryConfirmed(Entry)), entryManager, SLOT(delEntry(Entry)));
     connect(entryInteractionWidget, SIGNAL(editPasswordConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));

@@ -81,8 +81,13 @@ void EntryInteractionWidget::triggerEditEntrynameMode()
         confirm();
         entrynameLine->setPlaceholderText("");
     }
-    else if (m_displayMode == EntryInfo)
+    else
     {
+        if (m_displayMode != EntryInfo)
+            return;
+        if (entrynameLine->text().isEmpty())
+            return;
+
         entrynameLine->setPlaceholderText(entrynameLine->text());
         setDisplayMode(EditEntryname);
     }
@@ -95,8 +100,13 @@ void EntryInteractionWidget::triggerEditUsernameMode()
         confirm();
         usernameLine->setPlaceholderText("");
     }
-    else if (m_displayMode == EntryInfo)
+    else
     {
+        if (m_displayMode != EntryInfo)
+            return;
+        if (usernameLine->text().isEmpty())
+            return;
+
         usernameLine->setPlaceholderText(usernameLine->text());
         setDisplayMode(EditUsername);
     }
@@ -195,6 +205,9 @@ void EntryInteractionWidget::confirm()
 
     case DeleteEntry:
         emit deleteEntryConfirmed(Entry(entryname, username));
+        entrynameLine->clear();
+        usernameLine->clear();
+        passwordLine->clear();
         break;
 
     default: break;
@@ -202,9 +215,6 @@ void EntryInteractionWidget::confirm()
 
     // Resetting display
     setDisplayMode(EntryInfo);
-    entrynameLine->clear();
-    usernameLine->clear();
-    passwordLine->clear();
 }
 
 void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
@@ -223,7 +233,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         charTypesWidget->hide();
         cancelButton->hide();
         confirmButton->hide();
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(true);
         editUsernameAction->setEnabled(true);
         editPasswordAction->setEnabled(true);
@@ -248,7 +258,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(false);
         editUsernameAction->setEnabled(false);
         editPasswordAction->setEnabled(false);
@@ -261,7 +271,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'ENTREE")));
         // Lines
         entrynameLine->setReadOnly(false);
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(true);
         editUsernameAction->setEnabled(false);
         editPasswordAction->setEnabled(false);
@@ -274,7 +284,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         displayModeLabel->setText(QString(tr("MODIFIER LE NOM D'UTILISATEUR")));
         // Lines
         usernameLine->setReadOnly(false);
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(false);
         editUsernameAction->setEnabled(true);
         editPasswordAction->setEnabled(false);
@@ -296,7 +306,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         charTypesWidget->show();
         cancelButton->show();
         confirmButton->show();
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(false);
         editUsernameAction->setEnabled(false);
         editPasswordAction->setEnabled(false);
@@ -310,7 +320,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         // Hidden widgets
         cancelButton->show();
         confirmButton->show();
-        // Enabled buttons
+        // Enabled actions
         editEntrynameAction->setEnabled(false);
         editUsernameAction->setEnabled(false);
         editPasswordAction->setEnabled(false);

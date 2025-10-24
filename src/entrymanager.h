@@ -44,10 +44,10 @@ public slots:
     void editEntry(const Entry& newEntry, const Entry& oldEntry);
 
 signals:
-    void entryAdded();
-    void entryDeleted();
-    void entryReset();
-    void entryEdited();
+    void entryAdded(const Entry& entry);
+    void entryDeleted(const Entry& entry);
+    void entryReset(const Entry& entry);
+    void entryEdited(const Entry& entry);
 
 private:
     QList<Entry> m_entryList;
