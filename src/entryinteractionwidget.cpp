@@ -8,6 +8,9 @@ namespace pwm {
 EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidget* parent)
     : QWidget{parent}, entryManager(entryManager), m_displayMode(EntryInfo)
 {
+    // Clipboard
+    clipboard = QApplication::clipboard();
+
     // Labels
     displayModeLabel = new QLabel();
     entrynameLabel = new QLabel(QString(tr("Nom de l'entrée")));
@@ -54,11 +57,13 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     mainLayout->addWidget(confirmButton);
 
     // Initializations
-    updateDisplay(EntryInfo);
+    updateDisplay(NoEntry);
 
     // Slots / signals
     connect(this, SIGNAL(displayModeChanged(DisplayMode)), this, SLOT(updateDisplay(DisplayMode)));
     connect(seePasswordAction, SIGNAL(triggered(bool)), this, SLOT(reversePasswordEchoMode()));
+    connect(copyUsernameAction, SIGNAL(triggered(bool)), this, SLOT(usernameToClipboard()));
+    connect(copyPasswordAction, SIGNAL(triggered(bool)), this, SLOT(passwordToClipboard()));
     connect(editEntrynameAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditEntrynameMode()));
     connect(editUsernameAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditUsernameMode()));
     connect(editPasswordAction, SIGNAL(triggered(bool)), this, SLOT(triggerEditPasswordMode()));
@@ -179,14 +184,20 @@ void EntryInteractionWidget::confirm()
             return;
         }
         emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
+        // Resetting display
+        setDisplayMode(EntryInfo);
         break;
 
     case EditEntryname:
         emit editEntrynameConfirmed(Entry(entryname, username), Entry(entrynameLine->placeholderText(), username));
+        // Resetting display
+        setDisplayMode(EntryInfo);
         break;
 
     case EditUsername:
         emit editUsernameConfirmed(Entry(entryname, username), Entry(entryname, usernameLine->placeholderText()));
+        // Resetting display
+        setDisplayMode(EntryInfo);
         break;
 
     case EditPassword:
@@ -201,6 +212,8 @@ void EntryInteractionWidget::confirm()
             return;
         }
         emit editPasswordConfirmed(Entry(entryname, username, passwordLength, characterTypes));
+        // Resetting display
+        setDisplayMode(EntryInfo);
         break;
 
     case DeleteEntry:
@@ -208,19 +221,38 @@ void EntryInteractionWidget::confirm()
         entrynameLine->clear();
         usernameLine->clear();
         passwordLine->clear();
+        // Resetting display
+        setDisplayMode(NoEntry);
         break;
 
     default: break;
     }
-
-    // Resetting display
-    setDisplayMode(EntryInfo);
 }
 
 void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
 {
     switch (displayMode)
     {
+    case NoEntry:
+        displayModeLabel->setText(QString(tr("AUCUN ENTREE SELECTIONNEE")));
+        // Lines
+        entrynameLine->setReadOnly(true);
+        usernameLine->setReadOnly(true);
+        passwordLine->setEchoMode(QLineEdit::Password);
+        // Hidden widgets
+        pwdLengthSlider->hide();
+        charTypesWidget->hide();
+        cancelButton->hide();
+        confirmButton->hide();
+        // Enabled actions
+        editEntrynameAction->setEnabled(false);
+        editUsernameAction->setEnabled(false);
+        editPasswordAction->setEnabled(false);
+        copyUsernameAction->setEnabled(false);
+        copyPasswordAction->setEnabled(false);
+        seePasswordAction->setEnabled(false);
+        break;
+
     case EntryInfo:
         displayModeLabel->setText(QString(tr("INFORMATION SUR L'ENTREE")));
         // Lines
@@ -228,7 +260,6 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
         usernameLine->setReadOnly(true);
         passwordLine->setEchoMode(QLineEdit::Password);
         // Hidden widgets
-        pwdLengthSlider->clear();
         pwdLengthSlider->hide();
         charTypesWidget->hide();
         cancelButton->hide();
@@ -339,6 +370,22 @@ void EntryInteractionWidget::reversePasswordEchoMode()
         passwordLine->setEchoMode(QLineEdit::Normal);
     else
         passwordLine->setEchoMode(QLineEdit::Password);
+}
+
+void EntryInteractionWidget::usernameToClipboard()
+{
+    QString username = usernameLine->text();
+    if (username.isEmpty())
+        return;
+    clipboard->setText(username);
+}
+
+void EntryInteractionWidget::passwordToClipboard()
+{
+    QString password = passwordLine->text();
+    if (password.isEmpty())
+        return;
+    clipboard->setText(password);
 }
 
 } // namespace pwm

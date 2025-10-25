@@ -12,8 +12,6 @@ MainWindow::MainWindow(QWidget* parent)
     setWindowTitle("PassePasse");
     setWindowIcon(QIcon(":/logo"));
 
-    clipboard = QApplication::clipboard();
-
     // Entry manager
     entryManager = new EntryManager(this);
 
@@ -99,7 +97,6 @@ MainWindow::MainWindow(QWidget* parent)
     // Entry interaction widget updates
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
-    connect(entryManager, SIGNAL(entryDeleted(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryEdited(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryReset(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     // Entry manager requests
@@ -131,22 +128,11 @@ MainWindow::MainWindow(QWidget* parent)
 
 MainWindow::~MainWindow()
 {
-    // Clearing clipboard when closing window if it contains a password.
-    if (passwords.contains(clipboard->text())) clipboard->clear();
-
     // Uncomment only if crypto parameters file is empty or parameters need to be changed
     //updateCryptoParams();
 
     // Encrypting with new master if modified
     // writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates);
-}
-
-void MainWindow::copyCell(const int row, const int col) const
-{
-    if (col == 1) // column for usernames
-        clipboard->setText(entryTable->item(row,col)->text());
-    else if (col == 2) // column for passwords
-        clipboard->setText(passwords[indexOf(entryTable->item(row,0)->text(),entryTable->item(row,1)->text())]);
 }
 
 void MainWindow::buttonFromCell(const int row, const int col)

@@ -4,7 +4,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QApplication>
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -20,7 +19,6 @@
 #include <QString>
 #include <QStringList>
 #include <QStringListModel>
-#include <QClipboard>
 #include <QDate>
 #include <QMessageBox>
 #include <QDebug>
@@ -48,15 +46,6 @@ public:
     ~MainWindow();
 
 private slots:
-    /**
-     * @brief Copy username or password to clipboard.
-     * @param row: Selected row of entry table.
-     * @param col: Selected column of entry table.
-     *
-     * Called when a cell is double clicked.
-     * Works only for col == 1 and col == 2.
-     */
-    void copyCell(const int row, const int col) const;
     /**
      * @brief Execute the action corresponding to the cell clicked.
      * @param row: Row index of the clicked cell.
@@ -180,9 +169,6 @@ private:
     EntryInteractionWidget* entryInteractionWidget;
     // Delete button
     QPushButton* delEntryButton;
-
-    // Clipboard for copying information
-    QClipboard* clipboard;
 
 
     QPushButton *addButton;

@@ -4,11 +4,13 @@
 #ifndef ENTRYINTERACTIONWIDGET_H
 #define ENTRYINTERACTIONWIDGET_H
 
+#include <QApplication>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QClipboard>
 #include <QString>
 #include <QAction>
 #include <QIcon>
@@ -28,7 +30,7 @@ class EntryInteractionWidget : public QWidget
 public:
     explicit EntryInteractionWidget(EntryManager* entryManager, QWidget* parent = nullptr);
 
-    enum DisplayMode { EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword, DeleteEntry };
+    enum DisplayMode {NoEntry, EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword, DeleteEntry };
 
     DisplayMode displayMode() const { return m_displayMode; }
     void setDisplayMode(DisplayMode displayMode)
@@ -82,6 +84,14 @@ private slots:
      * @brief Show/Hide password.
      */
     void reversePasswordEchoMode();
+    /**
+     * @brief Copy username to clipboard.
+     */
+    void usernameToClipboard();
+    /**
+     * @brief Copy password to clipboard.
+     */
+    void passwordToClipboard();
 
 signals:
     void displayModeChanged(const DisplayMode newDisplayMode);
@@ -118,6 +128,8 @@ private:
     DisplayMode m_displayMode;
 
     EntryManager* entryManager;
+
+    QClipboard* clipboard;
 
     // Widgets
     QVBoxLayout* mainLayout;
