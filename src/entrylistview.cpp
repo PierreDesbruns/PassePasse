@@ -5,18 +5,13 @@
 
 namespace pwm {
 
-EntryListView::EntryListView(EntryListModel* entryListModel, EntryManager* entryManager, QWidget* parent)
-    : QListView{parent}, entryManager(entryManager)
+EntryListView::EntryListView(QWidget* parent)
+    : QListView{parent}
 {
-    setModel(entryListModel);
-    setItemDelegate(new EntryListDelegate(this));
-
-    connect(this, SIGNAL(pressed(QModelIndex)), this, SLOT(triggerEntrySelected(QModelIndex)));
-}
-
-void EntryListView::triggerEntrySelected(const QModelIndex& index)
-{
-    emit entrySelected(index.data().value<Entry>());
+    connect(
+        this, &QListView::pressed,
+        this, [this](const QModelIndex& index) { entrySelected(index.data().value<Entry>()); }
+    );
 }
 
 } // namespace pwm

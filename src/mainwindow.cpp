@@ -18,13 +18,13 @@ MainWindow::MainWindow(QWidget* parent)
 //    addButton = new QPushButton(tr("Ajouter"));
 
     // Search bar
-    searchModel = new QStringListModel();
+    searchModel = new SearchModel(entryManager);
     searchCompleter = new QCompleter();
     searchCompleter->setModel(searchModel);
     searchCompleter->setCaseSensitivity(Qt::CaseInsensitive);
     searchCompleter->setCompletionMode(QCompleter::PopupCompletion);
     searchCompleter->setFilterMode(Qt::MatchContains);
-    searchBar = new QLineEdit();
+    searchBar = new SearchBar();
     searchBar->setCompleter(searchCompleter);
     searchBar->setClearButtonEnabled(true);
 
@@ -54,7 +54,9 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Entry list view
     entryListModel = new EntryListModel(entryManager, this);
-    entryListView = new EntryListView(entryListModel, entryManager);
+    entryListView = new EntryListView();
+    entryListView->setModel(entryListModel);
+    entryListView->setItemDelegate(new EntryListDelegate(entryListView));
 
     // Left widget
     leftWidget = new QWidget();
@@ -90,10 +92,9 @@ MainWindow::MainWindow(QWidget* parent)
     // Buttons
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddEntryMode()));
     connect(delEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerDeleteEntryMode()));
-    // List model updates
-    connect(entryManager, &EntryManager::entryAdded, entryListModel, &EntryListModel::updateData);
-    connect(entryManager, &EntryManager::entryDeleted, entryListModel, &EntryListModel::updateData);
-    connect(entryManager, &EntryManager::entryEdited, entryListModel, &EntryListModel::updateData);
+    // Search bar
+    connect(searchCompleter, qOverload<const QString&>(&QCompleter::activated), entryListModel, &EntryListModel::filter);
+    connect(searchBar, &SearchBar::textCleared, entryListModel, &EntryListModel::reset);
     // Entry interaction widget updates
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
@@ -236,11 +237,6 @@ void MainWindow::loadEntries()
     passwords = tempPasswords;
     dates = tempDates;
 
-    // Update search model without duplicates
-    QStringList searchEntrynames(entrynames);
-    searchEntrynames.removeDuplicates();
-    searchModel->setStringList(searchEntrynames);
-
     // Clear search bar
     searchBar->clear();
 
@@ -329,11 +325,6 @@ void MainWindow::addEntry()
         tr("Entrée ajoutée avec succès.")
         );
 
-    // Update search model without duplicates
-    QStringList searchEntrynames(entrynames);
-    searchEntrynames.removeDuplicates();
-    searchModel->setStringList(searchEntrynames);
-
     // Clear search bar
     searchBar->clear();
 
@@ -410,11 +401,6 @@ void MainWindow::delEntry(const int row)
         this->windowTitle(),
         tr("Entrée supprimée avec succès.")
         );
-
-    // Update search model without duplicates
-    QStringList searchEntrynames(entrynames);
-    searchEntrynames.removeDuplicates();
-    searchModel->setStringList(searchEntrynames);
 
     // Clear search bar
     searchBar->clear();
@@ -595,11 +581,6 @@ void MainWindow::updateListView()
         entrynames << entry.entryname();
         usernames << entry.username();
     }
-
-    // Update search model without duplicates
-    QStringList searchEntrynames(entrynames);
-    searchEntrynames.removeDuplicates();
-    searchModel->setStringList(searchEntrynames);
 
     // Clear search bar
     searchBar->clear();

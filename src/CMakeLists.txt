@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
         entrylistmodel.h entrylistmodel.cpp
         entrylistdelegate.h entrylistdelegate.cpp
         entrymanager.h entrymanager.cpp
+        searchbar.h searchbar.cpp
+        searchmodel.h searchmodel.cpp
         passwordlengthslider.h passwordlengthslider.cpp
         charactertypeswidget.h charactertypeswidget.cpp
         mainwindow.h mainwindow.cpp

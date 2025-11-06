@@ -6,6 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QVariant>
+#include <QStringList>
 #include <QDebug>
 
 #include "entrymanager.h"
@@ -18,25 +19,27 @@ class EntryListModel : public QAbstractListModel
 public:
     explicit EntryListModel(EntryManager* entryManager, QObject* parent = nullptr);
     /**
-     * @brief Return number entries from entry manager's list.
+     * @brief Return number entries.
      */
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     /**
-     * @brief Return index's entryname or username depending on role.
-     * @param index: Index corresponding to the entry.
-     * @param role: DisplayRole or UserRole.
-     * @return entryname if Displayrole; username if UserRole.
+     * @brief Return entry corresponding to given index.
      */
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
 public slots:
     /**
-     * @brief Emit datachanged signal.
+     * @brief Filter entrynames list with given filter.
      */
-    void updateData();
+    void filter(const QString& filter);
+    /**
+     * @brief Cancel filter by resetting entrynames list.
+     */
+    void reset();
 
 private:
     EntryManager* entryManager;
+    QList<Entry> entries;
 };
 
 } // namespace pwm

@@ -33,6 +33,8 @@
 #include "entrylistmodel.h"
 #include "entryinteractionwidget.h"
 #include "entrymanager.h"
+#include "searchbar.h"
+#include "searchmodel.h"
 
 
 namespace pwm {
@@ -153,9 +155,9 @@ private:
     QWidget* leftWidget;
     QVBoxLayout* leftLayout;
     // Search bar
-    QLineEdit* searchBar;
+    SearchBar* searchBar;
     QCompleter* searchCompleter;
-    QStringListModel* searchModel; // must be updated whenever [entrynames] is updated
+    SearchModel* searchModel;
     // Entry list view
     EntryListView* entryListView;
     EntryListModel* entryListModel;

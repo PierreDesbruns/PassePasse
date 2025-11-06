@@ -8,30 +8,55 @@ namespace pwm {
 EntryListModel::EntryListModel(EntryManager* entryManager, QObject *parent)
     : QAbstractListModel{parent}, entryManager(entryManager)
 {
-
+    // Signals / slots
+    connect(entryManager, &EntryManager::entryAdded, this, &EntryListModel::reset);
+    connect(entryManager, &EntryManager::entryDeleted, this, &EntryListModel::reset);
+    connect(entryManager, &EntryManager::entryEdited, this, &EntryListModel::reset);
 }
 
 int EntryListModel::rowCount(const QModelIndex& /*parent*/) const
 {
-    return entryManager->entryList().size();
+    return entries.size();
 }
 
-QVariant EntryListModel::data(const QModelIndex& index, int /*role*/) const
+QVariant EntryListModel::data(const QModelIndex& index, int role) const
 {
-    QVariant data;
+    if (!index.isValid() || index.row() >= entries.size())
+        return QVariant();
 
-    if (index.isValid())
+    if (role == Qt::DisplayRole || role == Qt::EditRole)
+        return QVariant::fromValue<Entry>(entries.at(index.row()));
+
+    return QVariant();
+}
+
+void EntryListModel::filter(const QString& filter)
+{
+    if (filter.isEmpty())
     {
-        if (index.row() < entryManager->entryList().size())
-            data.setValue(entryManager->entryList().at(index.row()));
+        reset();
+        return;
     }
 
-    return data;
+    entries.clear();
+
+    foreach (const Entry& entry, entryManager->entryList())
+    {
+        if (entry.entryname() == filter)
+            entries << entry;
+    }
+
+    // Emitting update signal
+    QModelIndex topLeft = createIndex(0,0);
+    QModelIndex bottomRight = createIndex(rowCount(), 0);
+    emit dataChanged(topLeft, bottomRight);
 }
 
-void EntryListModel::updateData()
+void EntryListModel::reset()
 {
-    // Creating index and emitting update signal
+    entries = entryManager->entryList();
+
+    // Emitting update signal
     QModelIndex topLeft = createIndex(0,0);
     QModelIndex bottomRight = createIndex(rowCount(), 0);
     emit dataChanged(topLeft, bottomRight);
