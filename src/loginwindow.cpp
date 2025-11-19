@@ -64,7 +64,7 @@ void LoginWindow::verifications()
     // Uncomment only if master password hash file is empty.
     // updateMasterHash(password);
 
-    if (!masterIsCorrect(password))
+    if (!pwmsecurity::masterIsCorrect(password))
     {
         // Wrong password
         QMessageBox::critical(
@@ -113,7 +113,7 @@ void LoginWindow::verifications()
         }
         else
         {
-            updateMasterHash(newPassword);
+            pwmsecurity::updateMasterHash(newPassword);
 
             QMessageBox::information(
                 this,

@@ -9,7 +9,6 @@
 #include <QMessageBox>
 
 #include "entry.h"
-#include "pwmsecurity.h"
 
 
 namespace pwm {

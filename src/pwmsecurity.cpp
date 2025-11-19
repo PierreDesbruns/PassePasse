@@ -1,11 +1,11 @@
-// Copyright (C) 2024 Pierre Desbruns
+// Copyright (C) 2025 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "pwmsecurity.h"
 
-namespace pwm {
+namespace pwmsecurity {
 
-int updateMasterHash(const QString &password)
+int updateMasterHash(const QString& password)
 {
     FILE * masterHashFile = fopen("master.hash", "wb");
     int returnValue = -1;
@@ -81,6 +81,29 @@ ret:
     return returnValue;
 }
 
+const bool masterIsCorrect(const QString& master)
+{
+    char hash[crypto_pwhash_STRBYTES];
+    FILE * masterHashFile = fopen("master.hash", "rb");
+
+    // Reading hash from file
+    if (fread(hash, sizeof hash[0], sizeof hash, masterHashFile) == 0)
+    {
+        // Error in file reading
+        qCritical() << "Failed to read master hash.";
+        return false;
+    }
+
+    // Verifying password with hash
+    if (crypto_pwhash_str_verify(
+            hash,
+            master.toStdString().c_str(),
+            master.size()) == 0)
+        return true;
+
+    return false;
+}
+
 QString generatePassword(const int passwordLength, const bool hasLowCase, const bool hasUpCase, const bool hasNumbers, const bool hasSpecials)
 {
     QString characters = "";
@@ -108,7 +131,7 @@ QString generatePassword(const int passwordLength, const bool hasLowCase, const 
     return password;
 }
 
-int generateSecretKey(unsigned char secretKey[crypto_secretstream_xchacha20poly1305_KEYBYTES], const QString &master)
+int generateSecretKey(unsigned char secretKey[crypto_secretstream_xchacha20poly1305_KEYBYTES], const QString& master)
 {
     unsigned char salt[crypto_pwhash_SALTBYTES];
     unsigned long long opslimit;
@@ -162,7 +185,7 @@ ret:
     return returnValue;
 }
 
-QStringList readEntries(const QString &master)
+QStringList readEntries(const QString& master)
 {
     QStringList entries;
 
@@ -229,7 +252,7 @@ ret:
     return entries;
 }
 
-int writeEntries(const QString &master, const QStringList &entrynames, const QStringList &usernames, const QStringList &passwords, const QStringList &dates)
+int writeEntries(const QString& master, const QStringList& entrynames, const QStringList& usernames, const QStringList& passwords, const QStringList& dates)
 {
     int returnValue = -1;
 
@@ -311,27 +334,4 @@ ret:
     return returnValue;
 }
 
-const bool masterIsCorrect(const QString &master)
-{
-    char hash[crypto_pwhash_STRBYTES];
-    FILE * masterHashFile = fopen("master.hash", "rb");
-
-    // Reading hash from file
-    if (fread(hash, sizeof hash[0], sizeof hash, masterHashFile) == 0)
-    {
-        // Error in file reading
-        qCritical() << "Failed to read master hash.";
-        return false;
-    }
-
-    // Verifying password with hash
-    if (crypto_pwhash_str_verify(
-            hash,
-            master.toStdString().c_str(),
-            master.size()) == 0)
-        return true;
-
-    return false;
-}
-
-} // namespace pwm
+} // namespace pwmsecurity

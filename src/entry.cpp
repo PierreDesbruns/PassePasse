@@ -80,7 +80,7 @@ void Entry::setPassword(const int passwordLength, const int characterTypes)
     bool hasNumbers = ((characterTypes & 0b0010) != 0);
     bool hasSpecials = ((characterTypes & 0b0001) != 0);
 
-    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
+    QString password = pwmsecurity::generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
 
     if (password.isEmpty())
     {

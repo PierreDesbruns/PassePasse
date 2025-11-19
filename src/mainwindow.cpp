@@ -130,10 +130,10 @@ MainWindow::MainWindow(QWidget* parent)
 MainWindow::~MainWindow()
 {
     // Uncomment only if crypto parameters file is empty or parameters need to be changed
-    //updateCryptoParams();
+    // pwmsecurity::updateCryptoParams();
 
     // Encrypting with new master if modified
-    // writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates);
+    // pwmsecurity::writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates);
 }
 
 void MainWindow::buttonFromCell(const int row, const int col)
@@ -190,7 +190,7 @@ void MainWindow::loadEntries()
     QStringList tempPasswords = passwords;
     QStringList tempDates = dates;
 
-    QStringList entries = readEntries(loginWindow->getPassword());
+    QStringList entries = pwmsecurity::readEntries(loginWindow->getPassword());
 
     if (entries.isEmpty())
     {
@@ -215,7 +215,7 @@ void MainWindow::loadEntries()
     }
 
     // Re-writing file in case master password has changed
-    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (pwmsecurity::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Error in entries writing. Could not encrypt entries with new password.";
@@ -275,7 +275,7 @@ void MainWindow::addEntry()
         return;
     }
 
-    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
+    QString password = pwmsecurity::generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
 
     if (password.isEmpty())
     {
@@ -298,7 +298,7 @@ void MainWindow::addEntry()
     tempDates.append(QDate::currentDate().toString("yyyy.MM.dd"));
 
     // Writing entries in file
-    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (pwmsecurity::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         QMessageBox::critical(
@@ -374,7 +374,7 @@ void MainWindow::delEntry(const int row)
     }
 
     // Writing entries in file
-    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (pwmsecurity::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Failed to write entry. Entry" << entryname << username << "not added.";
@@ -427,7 +427,7 @@ void MainWindow::regEntry()
     QStringList tempPasswords = passwords;
     QStringList tempDates = dates;
 
-    QString password = generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
+    QString password = pwmsecurity::generatePassword(passwordLength, hasLowCase, hasUpCase, hasNumbers, hasSpecials);
 
     if (password.isEmpty())
     {
@@ -457,7 +457,7 @@ void MainWindow::regEntry()
     }
 
     // Writing entries in file
-    if (writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
+    if (pwmsecurity::writeEntries(loginWindow->getNewPassword(), tempEntrynames, tempUsernames, tempPasswords, tempDates) != 0)
     {
         // Error in file writing
         qCritical() << "Failed to write entry. Entry" << entryname << username << "not added.";
@@ -532,7 +532,7 @@ void MainWindow::editEntry(const int row)
         usernames[indexToEdit] = entryTable->item(row,1)->text();
 
         // Writing entries in file
-        if (writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates) != 0)
+        if (pwmsecurity::writeEntries(loginWindow->getNewPassword(), entrynames, usernames, passwords, dates) != 0)
         {
             // Error in file writing
             QMessageBox::critical(
