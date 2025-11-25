@@ -9,6 +9,7 @@
 #include <QMessageBox>
 
 #include "entry.h"
+#include "pwmsecurity.h"
 
 
 namespace pwm {
@@ -23,6 +24,14 @@ public:
     QList<Entry> entryList() const { return m_entryList; }
 
 public slots:
+    /**
+     * @brief Initialize entry manager.
+     * @param master: Master password for file encryption/
+     * @param newMaster: New master password if changed by user.
+     *
+     * Load entries and save with new master if changed by user.
+     */
+    void init(const QString& master, const QString& newMaster);
     /**
      * @brief Add given entry to entry list.
      */
@@ -47,10 +56,23 @@ signals:
     void entryDeleted(const Entry& entry);
     void entryReset(const Entry& entry);
     void entryEdited(const Entry& entry);
+    void entriesLoaded();
 
 private:
     QList<Entry> m_entryList;
 
+    QString m_masterPassword;
+
+    /**
+     * @brief Save entries to entries file.
+     * @return Number of entries saved.
+     */
+    int saveEntries() const;
+    /**
+     * @brief Load entries from entries file.
+     * @return Number of entries loaded.
+     */
+    int loadEntries();
 };
 
 } // namespace pwm

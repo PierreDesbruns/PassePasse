@@ -6,7 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QVariant>
-#include <QStringList>
+#include <QList>
 #include <QDebug>
 
 #include "entrymanager.h"

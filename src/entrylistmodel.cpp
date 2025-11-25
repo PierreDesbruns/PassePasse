@@ -8,10 +8,10 @@ namespace pwm {
 EntryListModel::EntryListModel(EntryManager* entryManager, QObject *parent)
     : QAbstractListModel{parent}, entryManager(entryManager)
 {
-    // Signals / slots
     connect(entryManager, &EntryManager::entryAdded, this, &EntryListModel::reset);
     connect(entryManager, &EntryManager::entryDeleted, this, &EntryListModel::reset);
     connect(entryManager, &EntryManager::entryEdited, this, &EntryListModel::reset);
+    connect(entryManager, &EntryManager::entriesLoaded, this, &EntryListModel::reset);
 }
 
 int EntryListModel::rowCount(const QModelIndex& /*parent*/) const

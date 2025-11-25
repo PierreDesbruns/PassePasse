@@ -125,6 +125,7 @@ MainWindow::MainWindow(QWidget* parent)
 //    connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
 
 //    loginWindow->show();
+    entryManager->init("1234", "");
 }
 
 MainWindow::~MainWindow()

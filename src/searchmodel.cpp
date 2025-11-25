@@ -11,6 +11,7 @@ SearchModel::SearchModel(EntryManager* entryManager, QObject *parent)
     connect(entryManager, &EntryManager::entryAdded, this, &SearchModel::updateEntrynames);
     connect(entryManager, &EntryManager::entryDeleted, this, &SearchModel::updateEntrynames);
     connect(entryManager, &EntryManager::entryEdited, this, &SearchModel::updateEntrynames);
+    connect(entryManager, &EntryManager::entriesLoaded, this, &SearchModel::updateEntrynames);
 }
 
 int SearchModel::rowCount(const QModelIndex& /*parent*/) const
