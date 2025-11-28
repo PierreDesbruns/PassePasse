@@ -8,7 +8,7 @@ namespace pwm {
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
-//    setFixedSize(windowSize);
+    setMinimumSize(750, 550);
     setWindowTitle("PassePasse");
     setWindowIcon(QIcon(":/logo"));
 
@@ -38,9 +38,9 @@ MainWindow::MainWindow(QWidget* parent)
 //    entryTable->setColumnWidth(4,20);  // re-generate buttons
 //    entryTable->setColumnWidth(5,20);  // delete buttons
 
-//    loginWindow = new LoginWindow();
+    loginWindow = new LoginWindow(this);
 //    loginWindow->setWindowIcon(windowIcon());
-//    loginWindow->setModal(Qt::ApplicationModal);
+    loginWindow->setModal(Qt::ApplicationModal);
 
 //    addWindow = new AddEntryWindow(ENTRYNAME_MAXLEN, USERNAME_MAXLEN, PASSWORD_MAXLEN, this);
 //    addWindow->setWindowIcon(windowIcon());
@@ -120,12 +120,11 @@ MainWindow::MainWindow(QWidget* parent)
 //    connect(entryTable, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(copyCell(int,int)));
 //    connect(entryTable, SIGNAL(cellClicked(int,int)), this, SLOT(buttonFromCell(int,int)));
 //    connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(updateTable(QString)));
-//    // Login window
-//    connect(loginWindow, SIGNAL(accepted()), this, SLOT(loadEntries()));
-//    connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
+    // Login window
+    connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
+    connect(loginWindow, SIGNAL(authentified(QString,QString)), entryManager, SLOT(init(QString,QString)));
 
-//    loginWindow->show();
-    entryManager->init("1234", "");
+    loginWindow->show();
 }
 
 MainWindow::~MainWindow()

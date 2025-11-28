@@ -6,7 +6,7 @@
 namespace pwm {
 
 EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidget* parent)
-    : QWidget{parent}, entryManager(entryManager), m_displayMode(EntryInfo)
+    : QWidget{parent}, entryManager(entryManager), m_displayMode(NoEntry)
 {
     // Clipboard
     clipboard = QApplication::clipboard();
@@ -57,7 +57,7 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     mainLayout->addWidget(confirmButton);
 
     // Initializations
-    updateDisplay(NoEntry);
+    updateDisplay(m_displayMode);
 
     // Slots / signals
     connect(this, SIGNAL(displayModeChanged(DisplayMode)), this, SLOT(updateDisplay(DisplayMode)));
@@ -148,7 +148,23 @@ void EntryInteractionWidget::displayEntry(const Entry& entry)
 
 void EntryInteractionWidget::cancel()
 {
-    setDisplayMode(EntryInfo);
+    switch (m_displayMode)
+    {
+    case AddEntry:
+        setDisplayMode(NoEntry);
+        break;
+
+    case DeleteEntry:
+        setDisplayMode(EntryInfo);
+        break;
+
+    case EditPassword:
+        setDisplayMode(EntryInfo);
+        break;
+
+    default:
+        break;
+    }
 }
 
 void EntryInteractionWidget::confirm()
@@ -234,7 +250,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
     switch (displayMode)
     {
     case NoEntry:
-        displayModeLabel->setText(QString(tr("AUCUN ENTREE SELECTIONNEE")));
+        displayModeLabel->setText(QString(tr("AUCUNE ENTREE SELECTIONNEE")));
         // Lines
         entrynameLine->setReadOnly(true);
         usernameLine->setReadOnly(true);

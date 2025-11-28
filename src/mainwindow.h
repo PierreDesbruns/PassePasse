@@ -136,8 +136,6 @@ signals:
     void editEntryClicked(const int row);
 
 private:
-    const QSize windowSize = QSize(800,600);
-
     // Variables storing entries information
     QStringList entrynames;
     QStringList usernames;

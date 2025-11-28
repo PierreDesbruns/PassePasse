@@ -10,7 +10,7 @@ EntryListView::EntryListView(QWidget* parent)
 {
     connect(
         this, &QListView::pressed,
-        this, [this](const QModelIndex& index) { entrySelected(index.data().value<Entry>()); }
+        this, [this](const QModelIndex& index) { emit entrySelected(index.data().value<Entry>()); }
     );
 }
 

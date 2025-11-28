@@ -6,9 +6,10 @@
 
 namespace pwm {
 
-LoginWindow::LoginWindow()
+LoginWindow::LoginWindow(QWidget *parent)
+    : QDialog{parent}
 {
-    setWindowTitle(tr("Authentification"));
+    setWindowTitle("Passepasse - " + tr("Authentification"));
     setFixedSize(windowSmallSize);
 
     passwordLabel = new QLabel(QString(tr("Mot de passe")));
@@ -53,13 +54,15 @@ LoginWindow::LoginWindow()
     mainContent->setLayout(mainLayout);
 
     connect(changePwdButton, SIGNAL(pressed()), this, SLOT(changePassword()));
-    connect(confirmButton, SIGNAL(pressed()), this, SLOT(verifications()));
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(reject()));
+    connect(confirmButton, &QPushButton::pressed, this, &LoginWindow::accept);
 }
 
-void LoginWindow::verifications()
+void LoginWindow::accept()
 {
     const QString password = passwordLine->text();
+    const QString newPassword = newPasswordLine->text();
+    const int newPasswordLength = newPassword.size();
 
     // Uncomment only if master password hash file is empty.
     // updateMasterHash(password);
@@ -75,11 +78,9 @@ void LoginWindow::verifications()
         return;
     }
 
-    if (passwordChanged)
+    if (!newPassword.isEmpty())
     {
-        const QString newPassword = newPasswordLine->text();
-        const int newPasswordLength = newPassword.size();
-
+        // Password changed
         if (newPassword != confirmNewPasswordLine->text())
         {
             // New password and confirmation do not match
@@ -123,7 +124,8 @@ void LoginWindow::verifications()
         }
     }
 
-    accept();
+    emit authentified(password, newPassword);
+    QDialog::accept();
 }
 
 void LoginWindow::changePassword()
@@ -139,7 +141,7 @@ void LoginWindow::changePassword()
     changePwdButton->setVisible(false);
 
     // Updating flag
-    passwordChanged = true;
+//    passwordChanged = true;
 }
 
 } // namespace pwm
