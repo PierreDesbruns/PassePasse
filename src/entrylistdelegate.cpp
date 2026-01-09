@@ -19,9 +19,11 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     // Font
     QFont font = painter->font();
 
-    // Texts
+    // Entry info
     QString entryname = index.data().value<Entry>().entryname();
     QString username = index.data().value<Entry>().username();
+    QString date = index.data().value<Entry>().date();
+    QPixmap pixmap = iconFromDate(date).pixmap(QSize(40,40));
 
     // Rectangles
     QRect iconRect(option.rect.left(), option.rect.top(), 40, option.rect.height());
@@ -33,16 +35,17 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     painter->save();
 
     // Drawing icon
-    //    pen.setStyle(Qt::DotLine);
-    //    pen.setColor(QColor(255,0,0));
-    //    painter->setPen(pen);
-    //    painter->drawLine(iconRect.topLeft(),iconRect.topRight());
-    //    painter->drawLine(iconRect.topRight(),iconRect.bottomRight());
-    //    painter->drawLine(iconRect.bottomLeft(),iconRect.bottomRight());
-    //    painter->drawLine(iconRect.topLeft(),iconRect.bottomLeft());
-    //    pen.setStyle(Qt::SolidLine);
-    //    painter->setPen(pen);
-    painter->drawText(iconRect, Qt::AlignCenter, QString("O"));
+//        pen.setStyle(Qt::DotLine);
+//        pen.setColor(QColor(255,0,0));
+//        painter->setPen(pen);
+//        painter->drawLine(iconRect.topLeft(),iconRect.topRight());
+//        painter->drawLine(iconRect.topRight(),iconRect.bottomRight());
+//        painter->drawLine(iconRect.bottomLeft(),iconRect.bottomRight());
+//        painter->drawLine(iconRect.topLeft(),iconRect.bottomLeft());
+//        pen.setStyle(Qt::SolidLine);
+//        painter->setPen(pen);
+    // painter->drawText(iconRect, Qt::AlignCenter, QString("O"));
+    painter->drawPixmap(iconRect.adjusted(12,12,-12,-12), pixmap);
 
     // Drawing entry name
     //    r = option.rect.adjusted(50, 0, 0, 0);
@@ -81,6 +84,26 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 QSize EntryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     return QSize(option.rect.width(), 40);
+}
+
+QIcon iconFromDate(const QString &date)
+{
+    QDate pwdDate = QDate::fromString(date, "yyyy.MM.dd");
+    QDate currentDate = QDate::currentDate();
+    int monthDifference = 0; // number of months separating [currentDate] from [pwdDate]
+
+    if (pwdDate.isNull())
+    {
+        // Date format is incorrect
+        qWarning() << "Date format of " << date << "is incorrect. Date icon will not appear.";
+        return QIcon();
+    }
+
+    monthDifference = (currentDate.year() - pwdDate.year()) * 12 + (currentDate.month() - pwdDate.month());
+
+    if (monthDifference < 3) return QIcon(":/green");
+    if (monthDifference < 6) return QIcon(":/orange");
+    return QIcon(":/red");
 }
 
 } // namepsace pwm

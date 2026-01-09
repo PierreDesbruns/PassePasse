@@ -4,12 +4,9 @@
         <file alias="orange">icons/orange.ico</file>
         <file alias="red">icons/red.ico</file>
         <file alias="logo">icons/logo.ico</file>
-        <file alias="edit">icons/edit.ico</file>
         <file alias="validate">icons/validate.ico</file>
-        <file alias="regenerate">icons/regenerate.ico</file>
-        <file alias="delete">icons/delete.ico</file>
-        <file alias="copy">icons/copy_new.ico</file>
-        <file alias="edit2">icons/edit_new.ico</file>
-        <file alias="see">icons/see_new.ico</file>
+        <file alias="copy">icons/copy.ico</file>
+        <file alias="edit">icons/edit.ico</file>
+        <file alias="see">icons/see.ico</file>
     </qresource>
 </RCC>

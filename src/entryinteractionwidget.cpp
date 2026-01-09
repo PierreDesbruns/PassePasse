@@ -28,10 +28,10 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     passwordLine->setReadOnly(true);
 
     // Line edit actions
-    editEntrynameAction = entrynameLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
-    editUsernameAction = usernameLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
+    editEntrynameAction = entrynameLine->addAction(QIcon(":/edit"), QLineEdit::TrailingPosition);
+    editUsernameAction = usernameLine->addAction(QIcon(":/edit"), QLineEdit::TrailingPosition);
     copyUsernameAction = usernameLine->addAction(QIcon(":/copy"), QLineEdit::TrailingPosition);
-    editPasswordAction = passwordLine->addAction(QIcon(":/edit2"), QLineEdit::TrailingPosition);
+    editPasswordAction = passwordLine->addAction(QIcon(":/edit"), QLineEdit::TrailingPosition);
     copyPasswordAction = passwordLine->addAction(QIcon(":/copy"), QLineEdit::TrailingPosition);
     seePasswordAction = passwordLine->addAction(QIcon(":/see"), QLineEdit::TrailingPosition);
 
