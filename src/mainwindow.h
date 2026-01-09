@@ -7,26 +7,12 @@
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
-#include <QIcon>
 #include <QPushButton>
-#include <QListView>
 #include <QCompleter>
-#include <QSize>
-#include <QTableWidget>
-#include <QTableWidgetItem>
-#include <QHeaderView>
 #include <QString>
-#include <QStringList>
-#include <QStringListModel>
-#include <QDate>
-#include <QMessageBox>
 #include <QDebug>
 
-#include "pwmsecurity.h"
 #include "loginwindow.h"
-#include "addentrywindow.h"
-#include "regentrywindow.h"
 #include "entry.h"
 #include "entrylistview.h"
 #include "entrylistdelegate.h"
@@ -45,103 +31,8 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
-
-private slots:
-    /**
-     * @brief Execute the action corresponding to the cell clicked.
-     * @param row: Row index of the clicked cell.
-     * @param col: Column index of the clicked cell.
-     *
-     * Works only for col == 3 | 4 | 5.
-     */
-    void buttonFromCell(const int row, const int col);
-    /**
-     * @brief Fill the table with all entries.
-     * Called when the table needs to be reset.
-     */
-    void updateTable() const;
-    /**
-     * @brief Fill the table only with entries matching given entry name.
-     * @param entryname: name of entries to display.
-     *
-     * Called when an entry name is selected by auto-completion.
-     */
-    void updateTable(const QString &entryname) const;
-
-    /**
-     * @brief Open window responsible for re-generating an enrty.
-     * @param row: Entry's row index in table.
-     * @note This slot needs to be disconnected when an entry is being edited.
-     */
-    void openRegWindow(const int row) const;
-
-    /**
-     * @brief Load entries from entries file and store each field in corresponding string list.
-     * Entries file is re-encrypted in case master password has changed.
-     * Called when [loginwindow] is accepted.
-     */
-    void loadEntries();
-    /**
-     * @brief Add an entry to string lists, write entries in file, and update table.
-     * Called when [addWindow] is accepted.
-     * @note Check if entry already exists.
-     */
-    void addEntry();
-    /**
-     * @brief Remove an entry from string lists attributes, write entries in file, and update table.
-     * @param row: Row index of the entry to be deleted.
-     * Called when delete cell of an entry is clicked.
-     */
-    void delEntry(const int row);
-    /**
-     * @brief Re-generate a password for given entry and username, and write entries in file.
-     * Called when [regWindow] is accepted.
-     * @note Given entry should exist due to [regwindow] verifications.
-     */
-    void regEntry();
-    /**
-     * @brief Make entry and user names editable.
-     * @param row: Row index of the entry being edited.
-     * Called when the edit cell of an entry is clicked.
-     * Disconnect searchbar text changed, buttons and cell copy signals to avoid
-     * conflicts while editing an entry.
-     * @note Close the window if a problem occurs while writing in file.
-     */
-    void editEntry(const int row);
-
-    /**
-     * @brief Update list view and search bar whenever entry manager's list is modified.
-     */
-    void updateListView();
-
-signals:
-    /**
-     * @brief Signal emitted when delete button is clicked.
-     * @param row: Entry's row index in table.
-     * @see buttonFromCell()
-     */
-    void delEntryClicked(const int row);
-    /**
-     * @brief Signal emitted when re-generate button is clicked.
-     * @param row: Entry's row index in table.
-     * @see buttonFromCell()
-     */
-    void regEntryClicked(const int row);
-    /**
-     * @brief Signal emitted when entry edit button is clicked.
-     * @param row: Entry's row index in table.
-     * @see buttonFromCell()
-     */
-    void editEntryClicked(const int row);
 
 private:
-    // Variables storing entries information
-    QStringList entrynames;
-    QStringList usernames;
-    QStringList passwords;
-    QStringList dates;
-
     // Entry manager
     EntryManager* entryManager;
 
@@ -170,46 +61,8 @@ private:
     // Delete button
     QPushButton* delEntryButton;
 
-
-    QPushButton *addButton;
-
-    QTableWidget *entryTable;
-
+    // Login window
     LoginWindow *loginWindow; // window responsible for authentification. Shows only on start.
-    AddEntryWindow *addWindow; // window responsible for adding entries
-    RegEntryWindow *regWindow; // window responsible for re-generate entries password
-
-
-    /**
-     * @brief Add a row to the entry table.
-     * @param entryIndex: Index of the entry to display.
-     */
-    void addRow(const int entryIndex) const;
-
-    /**
-     * @brief Return an icon corresponding to an entry's date of creation.
-     * @param date: date of creation of the entry. Expected format: "yyyy.MM.dd".
-     * @return Green icon if date is okay; Orange icon if date is about to be passed; Red icon otherwise.
-     *
-     * Red icon: date is passed (more than 6 months);
-     * Orange icon: date is about to be passed (bwt. 3 and 6 months);
-     * Green icon: date is okay (less than 3 months).
-     */
-    QIcon iconFrom(const QString &date) const;
-
-    /**
-     * @brief Give the string list index corresponding to entry and user names.
-     * @param entryname: Name of the entry.
-     * @param username: Name of the user.
-     * @return Index of corresponding entry and user names; -1 if entry does not exist.
-     */
-    const int indexOf(const QString& entryname, const QString &username) const;
-
-    /**
-     * @brief Returns the row index of the entry being edited by user.
-     * @return Row index if a row is being edited; -1 other wise.
-     */
-    const int entryRowBeingEdited() const;
 };
 
 } // namespace pwm
