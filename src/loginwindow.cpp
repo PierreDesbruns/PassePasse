@@ -1,8 +1,7 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "loginwindow.h"
-
 
 namespace pwm {
 
@@ -12,27 +11,29 @@ LoginWindow::LoginWindow(QWidget *parent)
     setWindowTitle("Passepasse - " + tr("Authentification"));
     setFixedSize(windowSmallSize);
 
+    // Labels
     passwordLabel = new QLabel(QString(tr("Mot de passe")));
     newPasswordLabel = new QLabel(QString(tr("Nouveau")));
     confirmNewPasswordLabel = new QLabel(QString(tr("Confirmation")));
 
+    // Line edits
     passwordLine = new QLineEdit();
     passwordLine->setEchoMode(QLineEdit::Password);
     passwordLine->setMaxLength(MASTER_MAXLEN);
-
     newPasswordLine = new QLineEdit();
     newPasswordLine->setEchoMode(QLineEdit::Password);
     newPasswordLine->setMaxLength(MASTER_MAXLEN);
-
     confirmNewPasswordLine = new QLineEdit();
     confirmNewPasswordLine->setEchoMode(QLineEdit::Password);
     confirmNewPasswordLine->setMaxLength(MASTER_MAXLEN);
 
+    // Buttons
     confirmButton = new QPushButton(QString(tr("Confirmer")));
     cancelButton = new QPushButton(QString(tr("Annuler")));
     changePwdButton = new QPushButton(QString(tr("Changer")));
     confirmButton->setDefault(true);
 
+    // Layout
     formLayout = new QFormLayout();
     formLayout->addRow(passwordLabel, passwordLine);
     formLayout->addRow(newPasswordLabel, newPasswordLine);
@@ -53,6 +54,7 @@ LoginWindow::LoginWindow(QWidget *parent)
     mainContent->setFixedSize(windowSmallSize);
     mainContent->setLayout(mainLayout);
 
+    // Signals / slots
     connect(changePwdButton, SIGNAL(pressed()), this, SLOT(changePassword()));
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(reject()));
     connect(confirmButton, &QPushButton::pressed, this, &LoginWindow::accept);
@@ -139,9 +141,6 @@ void LoginWindow::changePassword()
     formLayout->setRowVisible(2, true);
     passwordLabel->setText(tr("Ancien"));
     changePwdButton->setVisible(false);
-
-    // Updating flag
-//    passwordChanged = true;
 }
 
 } // namespace pwm

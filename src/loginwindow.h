@@ -1,19 +1,17 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef LOGINWINDOW_H
 #define LOGINWINDOW_H
 
 #include <QDialog>
-#include <QMessageBox>
-#include <QSize>
-#include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMessageBox>
 
 #include "pwmsecurity.h"
 
@@ -26,8 +24,6 @@ class LoginWindow : public QDialog
 
 public:
     LoginWindow(QWidget* parent = nullptr);
-    QString getPassword() const { return passwordLine->text(); }
-    QString getNewPassword() const { return (newPasswordLine->text().isEmpty() ? getPassword() : newPasswordLine->text()); }
 
 private slots:
     /**
@@ -52,8 +48,6 @@ signals:
 private:
     const QSize windowSmallSize = QSize(300,90);
     const QSize windowLargeSize = QSize(300,140);
-
-//    bool passwordChanged = false; // flag to indicate if user asks to change master password
 
     QWidget *mainContent;
 
