@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef SEARCHBARMODEL_H
@@ -8,7 +8,7 @@
 #include <QStringList>
 #include <QDebug>
 
-#include "entrymanager.h"
+#include "entry.h"
 
 
 namespace pwm {
@@ -18,7 +18,7 @@ class SearchModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit SearchModel(EntryManager* entryManager, QObject* parent = nullptr);
+    explicit SearchModel(QObject* parent = nullptr);
     /**
      * @brief Return number entry names without duplicates.
      */
@@ -28,14 +28,13 @@ public:
      */
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
-private slots:
+public slots:
     /**
-     * @brief Update entry names from entry manager and removes duplicates.
+     * @brief Update entry names from given entry list and removes duplicates.
      */
-    void updateEntrynames();
+    void updateEntrynames(const QList<Entry>& entryList);
 
 private:
-    EntryManager* entryManager;
     QStringList entrynames; // without duplicates
 };
 

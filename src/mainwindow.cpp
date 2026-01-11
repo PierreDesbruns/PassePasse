@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent)
     // Search bar
     connect(searchCompleter, qOverload<const QString&>(&QCompleter::activated), entryListModel, &EntryListModel::filter);
     connect(searchBar, &SearchBar::textCleared, entryListModel, &EntryListModel::reset);
+    connect(entryManager, &EntryManager::entryListChanged, searchModel, &SearchModel::updateEntrynames);
     // Entry interaction widget updates
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));

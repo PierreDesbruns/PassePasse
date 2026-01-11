@@ -1,17 +1,13 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "searchmodel.h"
 
 namespace pwm {
 
-SearchModel::SearchModel(EntryManager* entryManager, QObject *parent)
-    : QAbstractListModel{parent}, entryManager(entryManager)
+SearchModel::SearchModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
-    connect(entryManager, &EntryManager::entryAdded, this, &SearchModel::updateEntrynames);
-    connect(entryManager, &EntryManager::entryDeleted, this, &SearchModel::updateEntrynames);
-    connect(entryManager, &EntryManager::entryEdited, this, &SearchModel::updateEntrynames);
-    connect(entryManager, &EntryManager::entriesLoaded, this, &SearchModel::updateEntrynames);
 }
 
 int SearchModel::rowCount(const QModelIndex& /*parent*/) const
@@ -30,11 +26,11 @@ QVariant SearchModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-void SearchModel::updateEntrynames()
+void SearchModel::updateEntrynames(const QList<Entry>& entryList)
 {
     entrynames.clear();
 
-    foreach (const Entry& entry, entryManager->entryList())
+    for (const Entry& entry : entryList)
         entrynames << entry.entryname();
 
     entrynames.removeDuplicates();

@@ -55,6 +55,7 @@ void EntryManager::addEntry(const Entry& entry)
     saveEntries();
 
     emit entryAdded(entry);
+    emit entryListChanged(m_entryList);
 }
 
 void EntryManager::delEntry(const Entry &entry)
@@ -84,6 +85,7 @@ void EntryManager::delEntry(const Entry &entry)
     saveEntries();
 
     emit entryDeleted(entry);
+    emit entryListChanged(m_entryList);
 }
 
 void EntryManager::resetEntry(const Entry& entry)
@@ -110,6 +112,7 @@ void EntryManager::resetEntry(const Entry& entry)
     saveEntries();
 
     emit entryReset(entry);
+    emit entryListChanged(m_entryList);
 }
 
 void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
@@ -141,6 +144,7 @@ void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
     saveEntries();
 
     emit entryEdited(entry);
+    emit entryListChanged(m_entryList);
 }
 
 int EntryManager::saveEntries() const
@@ -210,6 +214,7 @@ int EntryManager::loadEntries()
     qInfo() << "Entry Manager: Successfully loaded" << nbEntriesLoaded << "entries.";
 
     emit entriesLoaded();
+    emit entryListChanged(m_entryList);
 
     return nbEntriesLoaded;
 }

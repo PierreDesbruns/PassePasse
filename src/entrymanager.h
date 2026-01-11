@@ -57,6 +57,7 @@ signals:
     void entryReset(const Entry& entry);
     void entryEdited(const Entry& entry);
     void entriesLoaded();
+    void entryListChanged(const QList<Entry>& newEntryList);
 
 private:
     QList<Entry> m_entryList;
