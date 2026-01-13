@@ -17,8 +17,6 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
         ressources.qrc
-        addentrywindow.h addentrywindow.cpp
-        regentrywindow.h regentrywindow.cpp
         loginwindow.h loginwindow.cpp
         pwmsecurity.h pwmsecurity.cpp
         entry.h entry.cpp
