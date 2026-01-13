@@ -1,11 +1,11 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#include "entryinteractionwidget.h"
+#include "entryview.h"
 
 namespace pwm {
 
-EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidget* parent)
+EntryView::EntryView(EntryManager* entryManager, QWidget* parent)
     : QWidget{parent}, entryManager(entryManager), m_displayMode(NoEntry)
 {
     // Clipboard
@@ -53,8 +53,8 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     mainLayout->addWidget(passwordLine);
     mainLayout->addWidget(pwdLengthSlider);
     mainLayout->addWidget(charTypesWidget);
-    mainLayout->addWidget(cancelButton);
     mainLayout->addWidget(confirmButton);
+    mainLayout->addWidget(cancelButton);
 
     // Initializations
     updateDisplay(m_displayMode);
@@ -71,15 +71,15 @@ EntryInteractionWidget::EntryInteractionWidget(EntryManager* entryManager, QWidg
     connect(cancelButton, SIGNAL(pressed()), this, SLOT(cancel()));
 }
 
-void EntryInteractionWidget::triggerAddEntryMode()
+void EntryView::triggerAddEntryMode()
 {
-    if (m_displayMode != EntryInfo)
+    if (m_displayMode != EntryInfo && m_displayMode != NoEntry)
         return;
 
     setDisplayMode(AddEntry);
 }
 
-void EntryInteractionWidget::triggerEditEntrynameMode()
+void EntryView::triggerEditEntrynameMode()
 {
     if (m_displayMode == EditEntryname)
     {
@@ -98,7 +98,7 @@ void EntryInteractionWidget::triggerEditEntrynameMode()
     }
 }
 
-void EntryInteractionWidget::triggerEditUsernameMode()
+void EntryView::triggerEditUsernameMode()
 {
     if (m_displayMode == EditUsername)
     {
@@ -117,7 +117,7 @@ void EntryInteractionWidget::triggerEditUsernameMode()
     }
 }
 
-void EntryInteractionWidget::triggerEditPasswordMode()
+void EntryView::triggerEditPasswordMode()
 {
     if (m_displayMode != EntryInfo)
         return;
@@ -127,7 +127,7 @@ void EntryInteractionWidget::triggerEditPasswordMode()
     setDisplayMode(EditPassword);
 }
 
-void EntryInteractionWidget::triggerDeleteEntryMode()
+void EntryView::triggerDeleteEntryMode()
 {
     if (m_displayMode != EntryInfo)
         return;
@@ -137,7 +137,7 @@ void EntryInteractionWidget::triggerDeleteEntryMode()
     setDisplayMode(DeleteEntry);
 }
 
-void EntryInteractionWidget::displayEntry(const Entry& entry)
+void EntryView::displayEntry(const Entry& entry)
 {
     setDisplayMode(EntryInfo);
     entrynameLine->setText(entry.entryname());
@@ -146,7 +146,7 @@ void EntryInteractionWidget::displayEntry(const Entry& entry)
     passwordLine->setEchoMode(QLineEdit::Password);
 }
 
-void EntryInteractionWidget::cancel()
+void EntryView::cancel()
 {
     switch (m_displayMode)
     {
@@ -167,7 +167,7 @@ void EntryInteractionWidget::cancel()
     }
 }
 
-void EntryInteractionWidget::confirm()
+void EntryView::confirm()
 {
     // Getting values from widgets
     QString entryname = entrynameLine->text();
@@ -181,22 +181,22 @@ void EntryInteractionWidget::confirm()
     case AddEntry:
         if (entryname.isEmpty())
         {
-            qWarning() << "EntryInteractionWidget: Entry name is empty. Did not emit add signal.";
+            qWarning() << "EntryView: Entry name is empty. Did not emit add signal.";
             return;
         }
         if (username.isEmpty())
         {
-            qWarning() << "EntryInteractionWidget: User name is empty. Did not emit add signal.";
+            qWarning() << "EntryView: User name is empty. Did not emit add signal.";
             return;
         }
         if (passwordLength < 1)
         {
-            qWarning() << "EntryInteractionWidget: Pasword length is too small. Did not emit add signal.";
+            qWarning() << "EntryView: Pasword length is too small. Did not emit add signal.";
             return;
         }
         if (!characterTypes)
         {
-            qWarning() << "EntryInteractionWidget: No characters selected. Did not emit add signal.";
+            qWarning() << "EntryView: No characters selected. Did not emit add signal.";
             return;
         }
         emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
@@ -219,12 +219,12 @@ void EntryInteractionWidget::confirm()
     case EditPassword:
         if (passwordLength < 1)
         {
-            qWarning() << "EntryInteractionWidget: Pasword length is too small. Did not emit reset signal.";
+            qWarning() << "EntryView: Pasword length is too small. Did not emit reset signal.";
             return;
         }
         if (!characterTypes)
         {
-            qWarning() << "EntryInteractionWidget: No characters selected. Did not emit reset signal.";
+            qWarning() << "EntryView: No characters selected. Did not emit reset signal.";
             return;
         }
         emit editPasswordConfirmed(Entry(entryname, username, passwordLength, characterTypes));
@@ -245,7 +245,7 @@ void EntryInteractionWidget::confirm()
     }
 }
 
-void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
+void EntryView::updateDisplay(DisplayMode displayMode)
 {
     switch (displayMode)
     {
@@ -380,7 +380,7 @@ void EntryInteractionWidget::updateDisplay(DisplayMode displayMode)
     }
 }
 
-void EntryInteractionWidget::reversePasswordEchoMode()
+void EntryView::reversePasswordEchoMode()
 {
     if (passwordLine->echoMode() == QLineEdit::Password)
         passwordLine->setEchoMode(QLineEdit::Normal);
@@ -388,7 +388,7 @@ void EntryInteractionWidget::reversePasswordEchoMode()
         passwordLine->setEchoMode(QLineEdit::Password);
 }
 
-void EntryInteractionWidget::usernameToClipboard()
+void EntryView::usernameToClipboard()
 {
     QString username = usernameLine->text();
     if (username.isEmpty())
@@ -396,7 +396,7 @@ void EntryInteractionWidget::usernameToClipboard()
     clipboard->setText(username);
 }
 
-void EntryInteractionWidget::passwordToClipboard()
+void EntryView::passwordToClipboard()
 {
     QString password = passwordLine->text();
     if (password.isEmpty())

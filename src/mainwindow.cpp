@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "mainwindow.h"
@@ -50,14 +50,14 @@ MainWindow::MainWindow(QWidget* parent)
     leftLayout->addWidget(addEntryButton);
 
     // Entry information group
-    entryInteractionWidget = new EntryInteractionWidget(entryManager);
-    entryInteractionWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    entryView = new EntryView(entryManager);
+    entryView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     // Right widget
     rightWidget = new QWidget();
     rightWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     rightLayout = new QVBoxLayout(rightWidget);
-    rightLayout->addWidget(entryInteractionWidget, 1);
+    rightLayout->addWidget(entryView, 1);
     rightLayout->addWidget(delEntryButton, 1);
 
     // Main widget
@@ -69,8 +69,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     // Signals / slots
     // Buttons
-    connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddEntryMode()));
-    connect(delEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerDeleteEntryMode()));
+    connect(addEntryButton, SIGNAL(pressed()), entryView, SLOT(triggerAddEntryMode()));
+    connect(delEntryButton, SIGNAL(pressed()), entryView, SLOT(triggerDeleteEntryMode()));
     // Search model
     connect(entryManager, &EntryManager::entryListChanged, searchModel, &SearchModel::updateEntrynames);
     // Entry list model
@@ -78,16 +78,16 @@ MainWindow::MainWindow(QWidget* parent)
     connect(searchBar, &SearchBar::textCleared, entryListModel, &EntryListModel::clearFilter);
     connect(searchCompleter, qOverload<const QString&>(&QCompleter::activated), entryListModel, &EntryListModel::filter);
     // Entry interaction widget
-    connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
-    connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
-    connect(entryManager, SIGNAL(entryEdited(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
-    connect(entryManager, SIGNAL(entryReset(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
+    connect(entryListView, SIGNAL(entrySelected(Entry)), entryView, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryAdded(Entry)), entryView, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryEdited(Entry)), entryView, SLOT(displayEntry(Entry)));
+    connect(entryManager, SIGNAL(entryReset(Entry)), entryView, SLOT(displayEntry(Entry)));
     // Entry manager requests
-    connect(entryInteractionWidget, SIGNAL(addEntryConfirmed(Entry)), entryManager, SLOT(addEntry(Entry)));
-    connect(entryInteractionWidget, SIGNAL(deleteEntryConfirmed(Entry)), entryManager, SLOT(delEntry(Entry)));
-    connect(entryInteractionWidget, SIGNAL(editPasswordConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));
-    connect(entryInteractionWidget, SIGNAL(editEntrynameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
-    connect(entryInteractionWidget, SIGNAL(editUsernameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
+    connect(entryView, SIGNAL(addEntryConfirmed(Entry)), entryManager, SLOT(addEntry(Entry)));
+    connect(entryView, SIGNAL(deleteEntryConfirmed(Entry)), entryManager, SLOT(delEntry(Entry)));
+    connect(entryView, SIGNAL(editPasswordConfirmed(Entry)), entryManager, SLOT(resetEntry(Entry)));
+    connect(entryView, SIGNAL(editEntrynameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
+    connect(entryView, SIGNAL(editUsernameConfirmed(Entry,Entry)), entryManager, SLOT(editEntry(Entry,Entry)));
     // Login window
     connect(loginWindow, SIGNAL(rejected()), this, SLOT(close()));
     connect(loginWindow, SIGNAL(authentified(QString,QString)), entryManager, SLOT(init(QString,QString)));

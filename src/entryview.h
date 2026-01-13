@@ -1,8 +1,8 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef ENTRYINTERACTIONWIDGET_H
-#define ENTRYINTERACTIONWIDGET_H
+#ifndef ENTRYVIEW_H
+#define ENTRYVIEW_H
 
 #include <QApplication>
 #include <QWidget>
@@ -22,15 +22,15 @@
 
 namespace pwm {
 
-class EntryInteractionWidget : public QWidget
+class EntryView : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(DisplayMode displayMode READ displayMode WRITE setDisplayMode NOTIFY displayModeChanged)
 
 public:
-    explicit EntryInteractionWidget(EntryManager* entryManager, QWidget* parent = nullptr);
+    explicit EntryView(EntryManager* entryManager, QWidget* parent = nullptr);
 
-    enum DisplayMode {NoEntry, EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword, DeleteEntry };
+    enum DisplayMode {NoEntry, EntryInfo, AddEntry, EditEntryname, EditUsername, EditPassword, DeleteEntry};
 
     DisplayMode displayMode() const { return m_displayMode; }
     void setDisplayMode(DisplayMode displayMode)
@@ -160,4 +160,4 @@ private:
 
 } // namespace pwm
 
-#endif // ENTRYINTERACTIONWIDGET_H
+#endif // ENTRYVIEW_H

@@ -22,7 +22,7 @@ set(PROJECT_SOURCES
         loginwindow.h loginwindow.cpp
         pwmsecurity.h pwmsecurity.cpp
         entry.h entry.cpp
-        entryinteractionwidget.h entryinteractionwidget.cpp
+        entryview.h entryview.cpp
         entrylistview.h entrylistview.cpp
         entrylistmodel.h entrylistmodel.cpp
         entrylistdelegate.h entrylistdelegate.cpp

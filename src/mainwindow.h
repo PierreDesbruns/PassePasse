@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef MAINWINDOW_H
@@ -17,7 +17,7 @@
 #include "entrylistview.h"
 #include "entrylistdelegate.h"
 #include "entrylistmodel.h"
-#include "entryinteractionwidget.h"
+#include "entryview.h"
 #include "entrymanager.h"
 #include "searchbar.h"
 #include "searchmodel.h"
@@ -56,8 +56,8 @@ private:
     // Right widget
     QWidget* rightWidget;
     QVBoxLayout* rightLayout;
-    // Entry interaction widget
-    EntryInteractionWidget* entryInteractionWidget;
+    // Entry view widget
+    EntryView* entryView;
     // Delete button
     QPushButton* delEntryButton;
 
