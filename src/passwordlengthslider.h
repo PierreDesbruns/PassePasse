@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef PASSWORDLENGTHSLIDER_H
@@ -34,10 +34,11 @@ public slots:
     /**
      * @brief Clear slider's value to default.
      */
-    void clear() { setValue(12); }
+    void clear() { setValue(defaultValue); }
 
 private:
-    // Widgets
+    const int defaultValue = 16;
+
     QHBoxLayout* mainLayout;
     QSlider* lengthSlider;
     QLabel* lengthLabel;

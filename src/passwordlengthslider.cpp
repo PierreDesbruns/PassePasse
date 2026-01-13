@@ -6,13 +6,13 @@
 namespace pwm {
 
 PasswordLengthSlider::PasswordLengthSlider(const int pwdMaxLength, QWidget* parent)
-    : QWidget{parent}
+    : QWidget(parent)
 {
     // Slider
     lengthSlider = new QSlider(Qt::Horizontal);
     lengthSlider->setMinimum(1);
     lengthSlider->setMaximum(pwdMaxLength);
-    lengthSlider->setValue(12);
+    lengthSlider->setValue(defaultValue);
 
     // Label
     lengthLabel = new QLabel();

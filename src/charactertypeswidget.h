@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef CHARACTERTYPESWIDGET_H
@@ -38,10 +38,10 @@ public slots:
 private:
     QHBoxLayout* mainLayout;
 
-    QCheckBox *enableLowCaseBox;
-    QCheckBox *enableUpCaseBox;
-    QCheckBox *enableNumbersBox;
-    QCheckBox *enableSpecialsBox;
+    QCheckBox* enableLowCaseBox;
+    QCheckBox* enableUpCaseBox;
+    QCheckBox* enableNumbersBox;
+    QCheckBox* enableSpecialsBox;
 
     QButtonGroup* checkBoxesGroup;
 };

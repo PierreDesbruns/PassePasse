@@ -33,7 +33,7 @@ int CharacterTypesWidget::checkedBoxes() const
 {
     int checked = 0;
 
-    foreach (auto checkBox, checkBoxesGroup->buttons())
+    for (auto checkBox : checkBoxesGroup->buttons())
     {
         checked <<= 1;
         if (checkBox->isChecked())
@@ -45,7 +45,7 @@ int CharacterTypesWidget::checkedBoxes() const
 
 void CharacterTypesWidget::clear()
 {
-    foreach (auto checkBox, checkBoxesGroup->buttons())
+    for (auto checkBox : checkBoxesGroup->buttons())
         checkBox->setChecked(true);
 }
 
