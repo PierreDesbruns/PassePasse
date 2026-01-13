@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef ENTRYLISTMODEL_H
@@ -6,10 +6,9 @@
 
 #include <QAbstractListModel>
 #include <QVariant>
-#include <QList>
 #include <QDebug>
 
-#include "entrymanager.h"
+#include "entry.h"
 
 
 namespace pwm {
@@ -17,7 +16,7 @@ namespace pwm {
 class EntryListModel : public QAbstractListModel
 {
 public:
-    explicit EntryListModel(EntryManager* entryManager, QObject* parent = nullptr);
+    explicit EntryListModel(QObject* parent = nullptr);
     /**
      * @brief Return number entries.
      */
@@ -29,17 +28,20 @@ public:
 
 public slots:
     /**
-     * @brief Filter entrynames list with given filter.
+     * @brief Filter entries with given entry name.
      */
-    void filter(const QString& filter);
+    void filter(const QString& entryName);
+    void clearFilter();
     /**
-     * @brief Cancel filter by resetting entrynames list.
+     * @brief Update entries with given entry list.
+     * @note Filter is cleared.
      */
-    void reset();
+    void updateEntries(const QList<Entry>& entryList);
 
 private:
-    EntryManager* entryManager;
     QList<Entry> entries;
+    QString filterString;
+    QList<Entry> entriesFiltered;
 };
 
 } // namespace pwm

@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "entrylistdelegate.h"
@@ -13,7 +13,7 @@ EntryListDelegate::EntryListDelegate(QObject* parent)
 void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     // Highlight item if selected
-    if(option.state & QStyle::State_Selected)
+    if(option.state & QStyle::State_HasFocus)
         painter->fillRect(option.rect, option.palette.color(QPalette::Highlight));
 
     // Font
@@ -27,52 +27,20 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 
     // Rectangles
     QRect iconRect(option.rect.left(), option.rect.top(), 40, option.rect.height());
-    QRect entrynameRect = option.rect;
-    entrynameRect.adjust(40,0,0,-20);
-    QRect usernameRect = option.rect;
-    usernameRect.adjust(40,20,0,0);
+    QRect entrynameRect = option.rect.adjusted(40,0,0,-20);
+    QRect usernameRect = option.rect.adjusted(40,20,0,0);
 
     painter->save();
 
     // Drawing icon
-//        pen.setStyle(Qt::DotLine);
-//        pen.setColor(QColor(255,0,0));
-//        painter->setPen(pen);
-//        painter->drawLine(iconRect.topLeft(),iconRect.topRight());
-//        painter->drawLine(iconRect.topRight(),iconRect.bottomRight());
-//        painter->drawLine(iconRect.bottomLeft(),iconRect.bottomRight());
-//        painter->drawLine(iconRect.topLeft(),iconRect.bottomLeft());
-//        pen.setStyle(Qt::SolidLine);
-//        painter->setPen(pen);
-    // painter->drawText(iconRect, Qt::AlignCenter, QString("O"));
     painter->drawPixmap(iconRect.adjusted(12,12,-12,-12), pixmap);
 
     // Drawing entry name
-    //    r = option.rect.adjusted(50, 0, 0, 0);
-    //    pen.setStyle(Qt::DotLine);
-    //    pen.setColor(QColor(0,255,0));
-    //    painter->setPen(pen);
-    //    painter->drawLine(titleRect.topLeft(),titleRect.topRight());
-    //    painter->drawLine(titleRect.topRight(),titleRect.bottomRight());
-    //    painter->drawLine(titleRect.bottomLeft(),titleRect.bottomRight());
-    //    painter->drawLine(titleRect.topLeft(),titleRect.bottomLeft());
-    //    pen.setStyle(Qt::SolidLine);
-    //    painter->setPen(pen);
     font.setBold(true);
     painter->setFont(font);
     painter->drawText(entrynameRect, Qt::AlignBottom|Qt::AlignLeft|Qt::TextWordWrap, entryname);
 
     // Drawing user name
-    //    r = option.rect.adjusted(50, 0, 0, 0);
-    //    pen.setStyle(Qt::DotLine);
-    //    pen.setColor(QColor(0,0,255));
-    //    painter->setPen(pen);
-    //    painter->drawLine(descRect.topLeft(),descRect.topRight());
-    //    painter->drawLine(descRect.topRight(),descRect.bottomRight());
-    //    painter->drawLine(descRect.bottomLeft(),descRect.bottomRight());
-    //    painter->drawLine(descRect.topLeft(),descRect.bottomLeft());
-    //    pen.setStyle(Qt::SolidLine);
-    //    painter->setPen(pen);
     font.setBold(false);
     painter->setFont(font);
     painter->setPen(QColor(100,100,100));
@@ -86,7 +54,7 @@ QSize EntryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     return QSize(option.rect.width(), 40);
 }
 
-QIcon iconFromDate(const QString &date)
+QIcon iconFromDate(const QString& date)
 {
     QDate pwdDate = QDate::fromString(date, "yyyy.MM.dd");
     QDate currentDate = QDate::currentDate();

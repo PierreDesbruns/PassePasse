@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget* parent)
     delEntryButton = new QPushButton(QString("-"));
 
     // Entry list view
-    entryListModel = new EntryListModel(entryManager, this);
+    entryListModel = new EntryListModel(this);
     entryListView = new EntryListView();
     entryListView->setModel(entryListModel);
     entryListView->setItemDelegate(new EntryListDelegate(entryListView));
@@ -71,11 +71,13 @@ MainWindow::MainWindow(QWidget* parent)
     // Buttons
     connect(addEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerAddEntryMode()));
     connect(delEntryButton, SIGNAL(pressed()), entryInteractionWidget, SLOT(triggerDeleteEntryMode()));
-    // Search bar
-    connect(searchCompleter, qOverload<const QString&>(&QCompleter::activated), entryListModel, &EntryListModel::filter);
-    connect(searchBar, &SearchBar::textCleared, entryListModel, &EntryListModel::reset);
+    // Search model
     connect(entryManager, &EntryManager::entryListChanged, searchModel, &SearchModel::updateEntrynames);
-    // Entry interaction widget updates
+    // Entry list model
+    connect(entryManager, &EntryManager::entryListChanged, entryListModel, &EntryListModel::updateEntries);
+    connect(searchBar, &SearchBar::textCleared, entryListModel, &EntryListModel::clearFilter);
+    connect(searchCompleter, qOverload<const QString&>(&QCompleter::activated), entryListModel, &EntryListModel::filter);
+    // Entry interaction widget
     connect(entryListView, SIGNAL(entrySelected(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryAdded(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));
     connect(entryManager, SIGNAL(entryEdited(Entry)), entryInteractionWidget, SLOT(displayEntry(Entry)));

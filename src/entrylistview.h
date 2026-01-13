@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef ENTRYLISTVIEW_H

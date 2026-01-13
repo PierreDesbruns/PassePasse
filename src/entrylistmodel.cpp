@@ -1,22 +1,18 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "entrylistmodel.h"
 
 namespace pwm {
 
-EntryListModel::EntryListModel(EntryManager* entryManager, QObject *parent)
-    : QAbstractListModel{parent}, entryManager(entryManager)
+EntryListModel::EntryListModel(QObject* parent)
+    : QAbstractListModel(parent)
 {
-    connect(entryManager, &EntryManager::entryAdded, this, &EntryListModel::reset);
-    connect(entryManager, &EntryManager::entryDeleted, this, &EntryListModel::reset);
-    connect(entryManager, &EntryManager::entryEdited, this, &EntryListModel::reset);
-    connect(entryManager, &EntryManager::entriesLoaded, this, &EntryListModel::reset);
 }
 
 int EntryListModel::rowCount(const QModelIndex& /*parent*/) const
 {
-    return entries.size();
+    return (filterString.isEmpty() ? entries.size() : entriesFiltered.size());
 }
 
 QVariant EntryListModel::data(const QModelIndex& index, int role) const
@@ -25,26 +21,25 @@ QVariant EntryListModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
-        return QVariant::fromValue<Entry>(entries.at(index.row()));
+        return QVariant::fromValue<Entry>(filterString.isEmpty()
+                                              ? entries.at(index.row())
+                                              : entriesFiltered.at(index.row()));
 
     return QVariant();
 }
 
-void EntryListModel::filter(const QString& filter)
+void EntryListModel::filter(const QString& entryName)
 {
-    if (filter.isEmpty())
-    {
-        reset();
+    if (entryName.isEmpty())
         return;
-    }
 
-    entries.clear();
-
-    foreach (const Entry& entry, entryManager->entryList())
+    for (const Entry& entry : entries)
     {
-        if (entry.entryname() == filter)
-            entries << entry;
+        if (entry.entryname() == entryName)
+            entriesFiltered << entry;
     }
+
+    filterString = entryName;
 
     // Emitting update signal
     QModelIndex topLeft = createIndex(0,0);
@@ -52,9 +47,22 @@ void EntryListModel::filter(const QString& filter)
     emit dataChanged(topLeft, bottomRight);
 }
 
-void EntryListModel::reset()
+void EntryListModel::clearFilter()
 {
-    entries = entryManager->entryList();
+    filterString.clear();
+    entriesFiltered.clear();
+
+    // Emitting update signal
+    QModelIndex topLeft = createIndex(0,0);
+    QModelIndex bottomRight = createIndex(rowCount(), 0);
+    emit dataChanged(topLeft, bottomRight);
+}
+
+void EntryListModel::updateEntries(const QList<Entry>& entryList)
+{
+    entries = entryList;
+
+    clearFilter();
 
     // Emitting update signal
     QModelIndex topLeft = createIndex(0,0);

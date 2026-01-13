@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef ENTRYLISTDELEGATE_H
@@ -38,7 +38,7 @@ public:
  * Orange icon: date is about to be passed (bwt. 3 and 6 months);
  * Green icon: date is okay (less than 3 months).
  */
-QIcon iconFromDate(const QString &date);
+QIcon iconFromDate(const QString& date);
 
 } // namespace pwm
 
