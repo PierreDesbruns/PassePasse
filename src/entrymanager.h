@@ -1,3 +1,6 @@
+// Copyright (C) 2026 Pierre Desbruns
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef ENTRYMANAGER_H
 #define ENTRYMANAGER_H
 
@@ -33,11 +36,11 @@ public slots:
      */
     void init(const QString& master, const QString& newMaster);
     /**
-     * @brief Add given entry to entry list.
+     * @brief Add given entry to entry list after verifications.
      */
     void addEntry(const Entry& entry);
     /**
-     * @brief Delete given entry from entry list.
+     * @brief Delete given entry from entry list after verifications.
      */
     void delEntry(const Entry& entry);
     /**

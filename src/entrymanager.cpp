@@ -1,3 +1,6 @@
+// Copyright (C) 2026 Pierre Desbruns
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "entrymanager.h"
 
 namespace pwm {
@@ -58,7 +61,7 @@ void EntryManager::addEntry(const Entry& entry)
     emit entryListChanged(m_entryList);
 }
 
-void EntryManager::delEntry(const Entry &entry)
+void EntryManager::delEntry(const Entry& entry)
 {
     // Verifications
     int entryIndex = m_entryList.indexOf(entry);
