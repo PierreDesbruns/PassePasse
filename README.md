@@ -1,67 +1,66 @@
-# Password manager
+# PassePasse
 
 This simple application allows the user to safely store strong passwords on his/her local machine. It is developped with the [open-source version of Qt](https://www.qt.io/download-open-source) and it uses the [Sodium library](https://doc.libsodium.org/).
 
 Author: Pierre Desbruns
 
+## Features
+- Generate an unpredictable password from any type of character (lower and upper cases, numbers and special characters can be chosen).
+- Manage entries containing entry name, username, unpredictable password and date of last password update.
+- Copy username or password to clipboard.
+- Search for entries via entry name and search bar.
+- Secure and simplify access to application via a single master password that can be changed when launching the app.
+- Safely store entries via secret-key cryptography.
+- Safely store master password via hashing.
+
 ## Install
-Download the [password_manager-vX.X.X.zip file](https://github.com/PierreDesbruns/password_manager/releases/tag/v1.3.1) of the desired version (v1.3.1 is the latest) and extract all files.
-Then, see [Usage](#usage).
+Download [PassePasse-v2.1.0-rc.zip archive](https://github.com/PierreDesbruns/PassePasse/releases/tag/v2.1.0-rc) and extract all files.
+Executable is `PassePasse.exe`. A shortcut can be created to this executable.
+
+## Usage
+Run `PassePasse.exe`. An authentication window pops up and asks for master password **(default is *1234*)**.
+
+A correct master password gives access to the main window. All entries appear on the left. Clicking on one of them shows its details on the right part of the window.
+
+Click on bottom left button to add an entry with desired entry name and user name. After pressing validate button, an unpredictable password is generated from desired length and character types.
+
+Entry name, user name, and password can be edited by clicking on corresponding edit icon.
+
+User name and password can be copied to clipboard by clicking on corresponding copy icon.
+
+Password can be seen by clicking on see icon.
+
+Entry names can be searched in top right search bar which is case insensitive.
+
+A colored circle next to entries gives indication on password generation date: green for \< 3 months; orange for \< 6 months; red for \> 6 months.
+
+Click on bottom right button to delete desired entry. This choice must be validated.
+
+Application can be closed by simply hitting close button. Entries are saved whenever they are updated.
 
 ## Build from source
 This project has been built on Windows from [Qt Creator IDE](https://www.qt.io/product/development-tools) using [MinGW](https://sourceforge.net/projects/mingw/) and [CMake](https://cmake.org/). With these tools, here are the different steps to build the application:
 1. Clone this repository or download it as .zip file.
-2. In Qt Creator open `src/CMakeLists.txt` file.
+2. In Qt Creator open `src/CMakeLists.txt` file. Project should be configured correctly from `src/CMakeLists.txt.user` file.
 3. Install a [Sodium pre-built library](https://download.libsodium.org/libsodium/releases/) and change path to it in `CMakeLists.txt`:
 	```cmake
 	# Including libsodium
-	target_include_directories(password_manager PRIVATE "/path/to/libsodium-win64/include")
+	target_include_directories(${PROJECT_NAME} PRIVATE "/path/to/libsodium-win64/include")
 
-	target_link_libraries(password_manager
+	target_link_libraries(${PROJECT_NAME}
 		PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
 		PRIVATE "/path/to/libsodium-win64/lib/libsodium.a"
 	)
 	```
-3. Build the project with release compiler. A directory called `password_manager-v1.3.1-Release` is created by Qt in parent directory of `src`.
-4. Remove all files but `password_manager.exe` in release directory and execute `windeployqt.exe` (located inside Qt directory) in a command prompt with `/path/to/password_manager.exe` as argument.
-5. Move the three files `default/crypto.params`, `default/entries.cipher`, and `default/master.hash` to release directory.
-6. See [Usage](#usage).
+3. Build the project with release compiler. A directory called `PassePasse-v2.1.0-rc-Release` is created by Qt in parent directory of `src`.
+4. Remove **all files but `PassePasse.exe`** in release directory and execute `windeployqt.exe` (located inside Qt directory, `C:\Qt\6.5.1\mingw_64\bin` for example) in a command prompt with `/path/to/PassePasse.exe` as argument.
+5. Move release folder to any convenient location and set a shortcut to executable file (if needed).
+6. Move the three files `default/crypto.params`, `default/entries.cipher`, and `default/master.hash` to release directory.
+7. See [Usage](#usage).
 
 > [!NOTE]
-> Release folder can be moved anywhere. A shortcut to executable file can also be set at any convenient location.
+> Do not forget to copy `default/crypto.params`, `default/entries.cipher`, and `default/master.hash` files to release directory. Otherwise, you will be unable to authentify.
 
-## Usage
-Run `password_manager.exe`. An authentication window pops up and asks for master password (default is *1234*).
-
-A correct master password gives access to the main window containing all entries in a table: first column for entry names; second for usernames; third for passwords; fourth for editing entry; fifth for re-generating password; sixth for deleting entry.
-
-Double-click on username or password to copy it to clipboard.
-
-Entry names can be searched in top search bar. Search bar is case insensitive. Entry names that simply contain the searched word will appear.
-
-A colored circle next to entry name gives indication on password generation date: green for \< 3 months; orange for \< 6 months; red for \> 6 months.
-
-Click on add button to add an entry with desired entry name and user name. An unpredictable password is then generated from desired length and character types.
-
-Click on re-generate icon to reset password of selected entry with dedired length and character types.
-
-Click on delete icon and confirm to delete the desired entry.
-
-Click on edit icon to enter edit mode. Entry name and user name cells of the selected row should be colored in blue. Edit mode enables modification of entry and user names of an entry by double-clicking on them. In this mode, search bar and add/delete/re-generate buttons cannot be used. Also, several entries cannot be edited simultaneously. To confirm modifications, click on validate icon.
-
-Application can be closed by simply hitting close button. Entries are saved whenever they are updated.
-
-## Features
-- Generate an unpredictable password from any type of character (lower and upper cases, numbers and special characters can be chosen).
-- Add / delete entries containing entry name, username, unpredictable password and date of last password update.
-- Re-generate a given entry's password if it is outdated.
-- Edit entry or user names whenever they need to be updated.
-- Search for entries via entry name.
-- Copy username or password to clipboard via a simple double click on it.
-- Secure and simplify access to application via a single master password that can be changed when launching the app.
-- Safely store entries via secret-key cryptography.
-- Safely store master password via hashing.
-	
 ## License
 This project is licensed under the terms of the GNU LESSER GENERAL PUBLIC LICENSE Version 3 (only). More information can be found in [LICENSE.txt](LICENSE.txt).
 
