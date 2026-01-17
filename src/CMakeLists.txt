@@ -1,9 +1,9 @@
-# Copyright (C) 2025 Pierre Desbruns
+# Copyright (C) 2026 Pierre Desbruns
 # SPDX-License-Identifier: LGPL-3.0-only
 
 cmake_minimum_required(VERSION 3.5)
 
-project(password_manager VERSION 2.1.0 LANGUAGES CXX)
+project(PassePasse VERSION 2.1.0 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -34,37 +34,37 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(password_manager
+    qt_add_executable(${PROJECT_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET password_manager APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(password_manager SHARED
+        add_library(${PROJECT_NAME} SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(password_manager
+        add_executable(${PROJECT_NAME}
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
 # Including libsodium
-target_include_directories(password_manager PRIVATE "C:/DevTools/libsodium-win64/include")
+target_include_directories(${PROJECT_NAME} PRIVATE "C:/DevTools/libsodium-win64/include")
 
-target_link_libraries(password_manager
+target_link_libraries(${PROJECT_NAME}
     PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
     PRIVATE "C:/DevTools/libsodium-win64/lib/libsodium.a"
 )
 
-set_target_properties(password_manager PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -72,12 +72,12 @@ set_target_properties(password_manager PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS password_manager
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(password_manager)
+    qt_finalize_executable(${PROJECT_NAME})
 endif()
