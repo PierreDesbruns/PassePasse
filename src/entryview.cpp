@@ -172,6 +172,8 @@ void EntryView::confirm()
     // Getting values from widgets
     QString entryname = entrynameLine->text();
     QString username = usernameLine->text();
+    QString entryname_old = entrynameLine->placeholderText();
+    QString username_old = usernameLine->placeholderText();
     int passwordLength = pwdLengthSlider->value();
     int characterTypes = charTypesWidget->checkedBoxes();
 
@@ -201,13 +203,15 @@ void EntryView::confirm()
         break;
 
     case EditEntryname:
-        emit editEntrynameConfirmed(Entry(entryname, username), Entry(entrynameLine->placeholderText(), username));
+        if (entryname != entryname_old)
+            emit editEntrynameConfirmed(Entry(entryname, username), Entry(entryname_old, username));
         // Resetting display
         setDisplayMode(EntryInfo);
         break;
 
     case EditUsername:
-        emit editUsernameConfirmed(Entry(entryname, username), Entry(entryname, usernameLine->placeholderText()));
+        if (username != username_old)
+            emit editUsernameConfirmed(Entry(entryname, username), Entry(entryname, username_old));
         // Resetting display
         setDisplayMode(EntryInfo);
         break;
