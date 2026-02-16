@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #include "pwmsecurity.h"
@@ -20,7 +20,7 @@ int updateMasterHash(const QString& password)
             crypto_pwhash_MEMLIMIT_INTERACTIVE) != 0)
     {
         // Out of memory
-        qCritical() << "Failed to generate hash for given password. Aborted before master hash file update.";
+        qCritical() << "Failed to generate hash from given password. Aborted before master hash update.";
         goto ret;
     }
 
@@ -28,7 +28,7 @@ int updateMasterHash(const QString& password)
     if (fwrite(hash, sizeof hash[0], sizeof hash, masterHashFile) == 0)
     {
         // Error in file opening
-        qCritical() << "Failed to write password hash in file. Aborted master hash file update.";
+        qCritical() << "Failed to write password hash in file. Aborted master hash update.";
         goto ret;
     }
 
@@ -90,7 +90,7 @@ const bool masterIsCorrect(const QString& master)
     if (fread(hash, sizeof hash[0], sizeof hash, masterHashFile) == 0)
     {
         // Error in file reading
-        qCritical() << "Failed to read master hash.";
+        qCritical() << "Failed to read master hash. Aborted master verification.";
         return false;
     }
 
@@ -118,7 +118,7 @@ QString generatePassword(const int passwordLength, const bool hasLowCase, const 
     if (characters.isEmpty())
     {
         // All booleans are false
-        qCritical() << "Cannot generate password without any charater. Returned empty password.";
+        qWarning() << "Tried to generate password with no charater. Returned empty password.";
         return "";
     }
 
@@ -145,22 +145,22 @@ int generateSecretKey(unsigned char secretKey[crypto_secretstream_xchacha20poly1
     // Reading crypto parameters file
     if (fread(salt, sizeof salt[0], sizeof salt, cryptoFile) == 0)
     {
-        qCritical() << "Failed to read salt from file. Aborted before key generation.";
+        qCritical() << "Failed to read salt from file. Aborted key generation.";
         goto ret;
     }
     if (fread(&opslimit, sizeof opslimit, 1, cryptoFile) == 0)
     {
-        qCritical() << "Failed to read opslimit from file. Aborted before key generation.";
+        qCritical() << "Failed to read opslimit from file. Aborted key generation.";
         goto ret;
     }
     if (fread(&memlimit, sizeof memlimit, 1, cryptoFile) == 0)
     {
-        qCritical() << "Failed to read memlimie from file. Aborted before key generation.";
+        qCritical() << "Failed to read memlimie from file. Aborted key generation.";
         goto ret;
     }
     if (fread(&alg, sizeof alg, 1, cryptoFile) == 0)
     {
-        qCritical() << "Failed to read algorithm from file. Aborted before key generation.";
+        qCritical() << "Failed to read algorithm from file. Aborted key generation.";
         goto ret;
     }
 
@@ -201,20 +201,20 @@ QStringList readEntries(const QString& master)
     unsigned char key[crypto_secretstream_xchacha20poly1305_KEYBYTES];
     if (generateSecretKey(key, master) != 0)
     {
-        qCritical() << "Failed to generate secret key. Aborted before entries file reading.";
+        qCritical() << "Failed to generate secret key. Aborted entries reading.";
         goto ret;
     }
 
     // Header pull
     if (fread(header, sizeof header[0], sizeof header, entriesFile) == 0)
     {
-        qCritical() << "Failed to read header. Aborted entries file reading.";
+        qCritical() << "Failed to read header. Aborted entries reading.";
         goto ret;
     }
     if (crypto_secretstream_xchacha20poly1305_init_pull(&state, header, key) != 0)
     {
         // Incomplete header
-        qCritical() << "Failed to recognize header. Aborted entries file reading.";
+        qCritical() << "Failed to recognize header. Aborted entries reading.";
         goto ret;
     }
 
@@ -232,7 +232,7 @@ QStringList readEntries(const QString& master)
         if (crypto_secretstream_xchacha20poly1305_pull(&state, entryPlain, NULL, &tag, entryCipher, sizeof entryCipher, NULL, 0) != 0)
         {
             // Corrupted chunk
-            qCritical() << "Failed to decrypt entry. Aborted entries file reading.";
+            qCritical() << "Failed to decrypt entry. Aborted entries reading.";
             goto ret;
         }
 
@@ -261,7 +261,7 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
     // Checking size equality
     if (!(nbEntries == usernames.size() && nbEntries == passwords.size() && nbEntries == dates.size()))
     {
-        qCritical() << "Number of elements of each entry fields do not match. Aborted before entries file writing";
+        qCritical() << "Tried to write entries with different number of fields. Aborted before entries writing";
         return returnValue;
     }
 
@@ -276,7 +276,7 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
     unsigned char key[crypto_secretstream_xchacha20poly1305_KEYBYTES];
     if (generateSecretKey(key, master) != 0)
     {
-        qCritical() << "Failed to generate secret key. Aborted before entries file writing.";
+        qCritical() << "Failed to generate secret key. Aborted before entries writing.";
         goto ret;
     }
 
@@ -284,7 +284,7 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
     crypto_secretstream_xchacha20poly1305_init_push(&state, header, key);
     if (fwrite(header, sizeof header[0], sizeof header, entriesFile) == 0)
     {
-        qCritical() << "Failed to write header. Aborted entries file writing.";
+        qCritical() << "Failed to write header. Aborted entries writing.";
         goto ret;
     }
 
@@ -306,7 +306,8 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
         if (entryLength + 1 > ENTRY_MAXLEN) // +1 to consider '\0'
         {
             // Should never happen if max lengths are respected during entry creation
-            qWarning() << "Entry is too long. Skipping entry.";
+            qWarning() << "Tried to write an entry that contains too many characters. Skipped entry.";
+            continue;
         }
 
         // Writing QString entry into UChar

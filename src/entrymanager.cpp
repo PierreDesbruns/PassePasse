@@ -32,27 +32,29 @@ void EntryManager::addEntry(const Entry& entry)
     // Verifications
     if (entry.entryname().isEmpty())
     {
-        qWarning() << "Entry Manager: Given entry name is empty. Did not add entry.";
+        qCritical() << "Tried to add an entry with empty entry name. Aborted add entry.";
         return;
     }
     if (entry.username().isEmpty())
     {
-        qWarning() << "Entry Manager: Given user name is empty. Did not add entry.";
+        qCritical() << "Tried to add an entry with empty user name. Aborted add entry.";
         return;
     }
     if (entry.password().isEmpty())
     {
-        qWarning() << "Entry Manager: Generated password is empty. Did not add entry.";
+        qCritical() << "Tried to add an entry with empty password. Aborted add entry.";
         return;
     }
     if (m_entryList.contains(entry))
     {
-        qWarning() << "Entry Manager: Entry already exists. Did not add entry.";
+        qCritical() << "Tried to add an entry that already exists. Aborted add entry.";
         return;
     }
 
     // Entry list update
     m_entryList << entry;
+
+    qInfo() << "Entry successfully added.";
 
     // Saving entries
     saveEntries();
@@ -67,22 +69,24 @@ void EntryManager::delEntry(const Entry& entry)
     int entryIndex = m_entryList.indexOf(entry);
     if (entry.entryname().isEmpty())
     {
-        qWarning() << "Entry Manager: Given entry name is empty. Did not delete entry.";
+        qCritical() << "Tried to delete an entry with empty entry name. Aborted delete entry.";
         return;
     }
     if (entry.username().isEmpty())
     {
-        qWarning() << "Entry Manager: Given user name is empty. Did not delete entry.";
+        qCritical() << "Tried to delete an entry with empty user name. Aborted delete entry.";
         return;
     }
     if (entryIndex == -1)
     {
-        qWarning() << "Entry Manager: Entry does not exist. Did not delete entry.";
+        qCritical() << "Tried to delete an entry that does not exist. Aborted delete entry.";
         return;
     }
 
     // Removing entry
     m_entryList.removeAt(entryIndex);
+
+    qInfo() << "Entry successfully deleted.";
 
     // Saving entries
     saveEntries();
@@ -97,19 +101,21 @@ void EntryManager::resetEntry(const Entry& entry)
     int entryIndex = m_entryList.indexOf(entry);
     if (entryIndex == -1)
     {
-        qWarning() << "Entry Manager: Entry does not exist. Did not reset entry.";
+        qCritical() << "Tried to reset an entry that does not exist. Aborted reset entry.";
         return;
     }
 
     // Checking for error in password generation
     if (entry.password().isEmpty())
     {
-        qWarning() << "Entry Manager: Generated password is empty. Did not reset entry.";
+        qCritical() << "Tried to reset an entry with empty password. Aborted reset entry.";
         return;
     }
 
     // Replacing entry
     m_entryList.replace(entryIndex, entry);
+
+    qInfo() << "Entry successfully reset.";
 
     // Saving entries
     saveEntries();
@@ -124,14 +130,14 @@ void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
     int entryIndex = m_entryList.indexOf(oldEntry);
     if (entryIndex == -1)
     {
-        qWarning() << "Entry Manager: Entry not found. Did not edit entry.";
+        qCritical() << "Tried to edit an entry that does not exist. Aborted entry edit.";
         return;
     }
 
     // Checking potential doubles
     if (m_entryList.contains(newEntry))
     {
-        qWarning() << "Entry Manager: Given entry already exists. Did not edit entry.";
+        qCritical() << "Tried to edit an entry into an entry that already exists. Aborted entry edit.";
         return;
     }
 
@@ -142,6 +148,8 @@ void EntryManager::editEntry(const Entry& newEntry, const Entry& oldEntry)
     if (!newEntry.username().isEmpty())
         entry.setUsername(newEntry.username());
     m_entryList.replace(entryIndex, entry);
+
+    qInfo() << "Entry successfully edited.";
 
     // Saving entry
     saveEntries();
@@ -172,13 +180,13 @@ int EntryManager::saveEntries() const
     if (pwmsecurity::writeEntries(m_masterPassword, entrynames, usernames, passwords, dates) != 0)
     {
         // Error in file writing
-        qFatal() << "Entry Manager: Error while writing entries in file.";
-        return nbEntriesWritten;
+        qCritical() << "Failed to write entries in file. Aborted save entries.";
+        return 0;
     }
 
     nbEntriesWritten = entrynames.size();
 
-    qInfo() << "Entry Manager: Successfully saved" << nbEntriesWritten << "entries.";
+    qInfo() << "Successfully saved" << nbEntriesWritten << "entries.";
 
     return nbEntriesWritten;
 }
@@ -195,8 +203,8 @@ int EntryManager::loadEntries()
     if (entriyList_QString.isEmpty())
     {
         // Empty file or error in entries file reading
-        qWarning() << "No entry loaded. Entry file may be empty.";
-        return nbEntriesLoaded;
+        qWarning() << "No entry loaded. Entry file may be empty or an error occured during entry file reading.";
+        return 0;
     }
 
     // Converting QStringList to QList<Entry>
@@ -204,7 +212,7 @@ int EntryManager::loadEntries()
     {
         QStringList fields = entry.split('\t');
         if (fields.size() != 4)
-            qWarning() << "Format of entry" << entriyList_QString.indexOf(entry) <<  "is incorrect. Skipped entry.";
+            qWarning() << "Tried to load an entry with invalid format. Skipped entry.";
         else
         {
             entryList << Entry(fields[0], fields[1], fields[2], fields[3]);
@@ -214,7 +222,7 @@ int EntryManager::loadEntries()
 
     m_entryList = entryList;
 
-    qInfo() << "Entry Manager: Successfully loaded" << nbEntriesLoaded << "entries.";
+    qInfo() << "Successfully loaded" << nbEntriesLoaded << "entries.";
 
     emit entriesLoaded();
     emit entryListChanged(m_entryList);

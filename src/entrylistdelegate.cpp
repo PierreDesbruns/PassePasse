@@ -63,7 +63,7 @@ QIcon iconFromDate(const QString& date)
     if (pwdDate.isNull())
     {
         // Date format is incorrect
-        qWarning() << "Date format of " << date << "is incorrect. Date icon will not appear.";
+        qWarning() << "Tried to return an icon with wrong date format. Returned empty icon.";
         return QIcon();
     }
 

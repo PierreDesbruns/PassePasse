@@ -38,7 +38,7 @@ QString Entry::entryname() const
 void Entry::setEntryname(const QString& entryname)
 {
     if (entryname.isEmpty())
-        qWarning() << "Entry: Given entry name is empty.";
+        qWarning() << "Set entry with an empty entry name.";
 
     m_entryname = entryname;
 }
@@ -51,7 +51,7 @@ QString Entry::username() const
 void Entry::setUsername(const QString& username)
 {
     if (username.isEmpty())
-        qWarning() << "Entry: Given user name is empty.";
+        qWarning() << "Set entry with an empty user name.";
 
     m_username = username;
 }
@@ -65,12 +65,12 @@ void Entry::setPassword(const int passwordLength, const int characterTypes)
 {
     if (passwordLength < 1)
     {
-        qWarning() << "Entry: Given length is too small. Did not set password.";
+        qCritical() << "Tried to set entry's password with too small password length. Aborted set password.";
         return;
     }
     if ((characterTypes < 0) || (characterTypes > 15))
     {
-        qWarning() << "Entry: Charater types format not recognized. Did not set password.";
+        qWarning() << "Tried to set entry's password with invalid character type format. Aborted set password.";
         return;
     }
 
@@ -84,7 +84,7 @@ void Entry::setPassword(const int passwordLength, const int characterTypes)
 
     if (password.isEmpty())
     {
-        qWarning() << "Entry: Generated password is empty. Did not set password.";
+        qCritical() << "Tried to set entry's password with empty generated password. Aborted set password.";
         return;
     }
 

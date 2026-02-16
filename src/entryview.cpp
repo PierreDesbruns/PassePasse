@@ -181,22 +181,18 @@ void EntryView::confirm()
     case AddEntry:
         if (entryname.isEmpty())
         {
-            qWarning() << "EntryView: Entry name is empty. Did not emit add signal.";
             return;
         }
         if (username.isEmpty())
         {
-            qWarning() << "EntryView: User name is empty. Did not emit add signal.";
             return;
         }
         if (passwordLength < 1)
         {
-            qWarning() << "EntryView: Pasword length is too small. Did not emit add signal.";
             return;
         }
         if (!characterTypes)
         {
-            qWarning() << "EntryView: No characters selected. Did not emit add signal.";
             return;
         }
         emit addEntryConfirmed(Entry(entryname, username, passwordLength, characterTypes));
@@ -219,12 +215,10 @@ void EntryView::confirm()
     case EditPassword:
         if (passwordLength < 1)
         {
-            qWarning() << "EntryView: Pasword length is too small. Did not emit reset signal.";
             return;
         }
         if (!characterTypes)
         {
-            qWarning() << "EntryView: No characters selected. Did not emit reset signal.";
             return;
         }
         emit editPasswordConfirmed(Entry(entryname, username, passwordLength, characterTypes));
