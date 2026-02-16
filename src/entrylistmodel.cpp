@@ -33,6 +33,8 @@ void EntryListModel::filter(const QString& entryName)
     if (entryName.isEmpty())
         return;
 
+    entriesFiltered.clear();
+
     for (const Entry& entry : entries)
     {
         if (entry.entryname() == entryName)
