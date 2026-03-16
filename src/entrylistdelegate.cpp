@@ -51,7 +51,7 @@ void EntryListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 
 QSize EntryListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    return QSize(option.rect.width(), 40);
+    return QSize(option.rect.width() - 17, 40); // -17 because of scroll bar if many items
 }
 
 QIcon iconFromDate(const QString& date)
