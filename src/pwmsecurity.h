@@ -1,4 +1,4 @@
-// Copyright (C) 2025 Pierre Desbruns
+// Copyright (C) 2026 Pierre Desbruns
 // SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef PWMSECURITY_H
@@ -93,15 +93,20 @@ int generateSecretKey(unsigned char secretKey[], const QString& master);
  * @param master: Master password used to generate encryption/decryption key.
  * @return List of each line of password file.
  *
+ * Workflow:
  * 1. Secret key is generated from password and parameters.
- * 2. Each line of password file is decrypted and stored as string.
- * 3. All strings are returned as a list.
+ * 2. Each line of password file is decrypted and stored as string (QString).
+ * 3. All strings are returned as a list (QStringList).
  *
  * File structure (encrypted):
  * entryname1\tusername1\tpassword1\tdate1\0
  * entryname2\tusername2\tpassword2\tdate2\0
  * entryname3\tusername3\tpassword3\tdate3\0
  * ...
+ *
+ * @note If returned QStringList is empty, two possibilities:
+ * either entries contains no entry,
+ * or an error has occured during file reading.
  */
 QStringList readEntries(const QString& master);
 
@@ -109,8 +114,9 @@ QStringList readEntries(const QString& master);
  * @brief Write entries encrypted data to entries file.
  * @param master: Master password used to generate encryption/decryption key.
  * @param entrynames, usernames, passwords, dates: Lists of entries' fields.
- * @return 0 if successfully wrote entries file and entry fields have same number of elements; -1 otherwise.
+ * @return number of successfully written entries; -1 if an error occured.
  *
+ * Workflow:
  * 1. Secret key is generated from password and parameters.
  * 2. Each entry is concanetated as a line.
  * 3. Each line is encrypted.

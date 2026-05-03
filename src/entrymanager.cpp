@@ -177,14 +177,13 @@ int EntryManager::saveEntries() const
     }
 
     // Writing entries in file
-    if (pwmsecurity::writeEntries(m_masterPassword, entrynames, usernames, passwords, dates) != 0)
+    nbEntriesWritten = pwmsecurity::writeEntries(m_masterPassword, entrynames, usernames, passwords, dates);
+    if (nbEntriesWritten < 0)
     {
         // Error in file writing
         qCritical() << "Failed to write entries in file. Aborted save entries.";
         return 0;
     }
-
-    nbEntriesWritten = entrynames.size();
 
     qInfo() << "Successfully saved" << nbEntriesWritten << "entries.";
 

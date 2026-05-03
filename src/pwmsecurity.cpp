@@ -36,7 +36,6 @@ int updateMasterHash(const QString& password)
 ret:
     fclose(masterHashFile);
     return returnValue;
-
 }
 
 int updateCryptoParams()
@@ -288,19 +287,50 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
         goto ret;
     }
 
+    returnValue = 0;
+
     // Entries push
     for (int entry = 0 ; entry < nbEntries ; ++entry)
     {
         // Concatenating entry fields as an entry
-        QString entryAsString;
+        QString entryAsString = "";
+        QString field;
         int entryLength; // without '\0'
-        entryAsString.append(entrynames[entry]);
+        // entry name
+        field = entrynames[entry];
+        if (field.isEmpty())
+        {
+            qWarning() << "Tried to write an entry with empty entry name. Skipped entry.";
+            continue;
+        }
+        entryAsString.append(field);
         entryAsString.append('\t');
-        entryAsString.append(usernames[entry]);
+        // username
+        field = usernames[entry];
+        if (field.isEmpty())
+        {
+            qWarning() << "Tried to write an entry with empty username. Skipped entry.";
+            continue;
+        }
+        entryAsString.append(field);
         entryAsString.append("\t");
-        entryAsString.append(passwords[entry]);
+        // password
+        field = passwords[entry];
+        if (field.isEmpty())
+        {
+            qWarning() << "Tried to write an entry with empty password. Skipped entry.";
+            continue;
+        }
+        entryAsString.append(field);
         entryAsString.append("\t");
-        entryAsString.append(dates[entry]);
+        // date
+        field = dates[entry];
+        if (field.isEmpty())
+        {
+            qWarning() << "Tried to write an entry with empty date. Skipped entry.";
+            continue;
+        }
+        entryAsString.append(field);
         entryLength = entryAsString.size();
 
         if (entryLength + 1 > ENTRY_MAXLEN) // +1 to consider '\0'
@@ -327,9 +357,11 @@ int writeEntries(const QString& master, const QStringList& entrynames, const QSt
             qCritical() << "Failed to write entry. Aborted entries file writing.";
             goto ret;
         }
+
+        // Incrementing numbers of entries written
+        ++returnValue;
     }
 
-    returnValue = 0;
 ret:
     fclose(entriesFile);
     return returnValue;
