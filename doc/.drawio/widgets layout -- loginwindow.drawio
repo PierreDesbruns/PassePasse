@@ -1,0 +1,79 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="Gjcd_llvFQOBzX30I0rE">
+    <mxGraphModel dx="1229" dy="679" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="m9ONimToadY8-NieMjOf-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="230" width="630" x="99" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;div&gt;&lt;b&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;Widgets layout&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;i&gt;&lt;font style=&quot;font-size: 24px;&quot;&gt;Login window&lt;/font&gt;&lt;/i&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="190" x="319" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;LoginWindow &lt;/b&gt;&lt;i&gt;loginWindow&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="170" x="99" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;dashed=1;dashPattern=8 8;strokeColor=#808080;" value="" vertex="1">
+          <mxGeometry height="200" width="610" x="109" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;fontColor=#808080;" value="&lt;b&gt;QWidget&amp;nbsp;&lt;/b&gt;&lt;i&gt;mainContent&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="170" x="109" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="210" x="119" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;Label &lt;/i&gt;&lt;/b&gt;&lt;i&gt;passwordLabel&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="130" x="119" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="371" x="339" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-9" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;LineEdit &lt;/i&gt;&lt;/b&gt;&lt;i&gt;passwordLine&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="140" x="339" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="371" x="339" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-11" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;LineEdit &lt;/i&gt;&lt;/b&gt;&lt;i&gt;newPasswordLine&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="339" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="210" x="119" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;Label &lt;/i&gt;&lt;/b&gt;&lt;i&gt;newPasswordLabel&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="150" x="119" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="210" x="119" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-15" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;Label &lt;/i&gt;&lt;/b&gt;&lt;i&gt;confirmNewPasswordLabel&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="200" x="119" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="371" x="339" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-17" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;LineEdit &lt;/i&gt;&lt;/b&gt;&lt;i&gt;confirmNewPasswordLine&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="210" x="339" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="190" x="119" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;PushButton&amp;nbsp;&lt;/i&gt;&lt;/b&gt;&lt;i&gt;changePwdButton&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="180" x="119" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="190" x="319" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-22" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;PushButton &lt;/i&gt;&lt;/b&gt;&lt;i&gt;confirmButton&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="319" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-24" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" value="" vertex="1">
+          <mxGeometry height="20" width="190" x="519" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="m9ONimToadY8-NieMjOf-23" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Q&lt;i&gt;PushButton &lt;/i&gt;&lt;/b&gt;&lt;i&gt;cancelButton&lt;/i&gt;" vertex="1">
+          <mxGeometry height="20" width="160" x="519" y="290" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
