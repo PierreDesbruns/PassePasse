@@ -8,35 +8,46 @@ Author: Pierre Desbruns
 - Generate an unpredictable password from any type of character (lower and upper cases, numbers and special characters can be chosen).
 - Manage entries containing entry name, username, unpredictable password and date of last password update.
 - Copy username or password to clipboard.
-- Search for entries via entry name and search bar.
-- Secure and simplify access to application via a single master password that can be changed when launching the app.
+- Search for entries via entry name in a search bar.
+- Secure and simplify access to the application via a single master password that can be changed when launching the app.
 - Safely store entries via secret-key cryptography.
 - Safely store master password via hashing.
 
 ## Install
-Download [PassePasse-v2.1.0-rc.zip archive](https://github.com/PierreDesbruns/PassePasse/releases/tag/v2.1.0-rc) and extract all files.
+Download [PassePasse-v2.1.0.zip archive](https://github.com/PierreDesbruns/PassePasse/releases/tag/v2.1.0) and extract all files.
 Executable is `PassePasse.exe`. A shortcut can be created to this executable.
 
 ## Usage
+### Start application
 Run `PassePasse.exe`. An authentication window pops up and asks for master password **(default is *1234*)**.
 
+### Main display
 A correct master password gives access to the main window. All entries appear on the left. Clicking on one of them shows its details on the right part of the window.
 
-Click on bottom left button to add an entry with desired entry name and user name. After pressing validate button, an unpredictable password is generated from desired length and character types.
+A **colored circle** next to entries gives indication on password generation date: green for \< 3 months; orange for \< 6 months; red for \> 6 months.
 
-Entry name, user name, and password can be edited by clicking on corresponding edit icon.
+User name and password can be copied to clipboard by clicking on corresponding **copy icon**.
 
-User name and password can be copied to clipboard by clicking on corresponding copy icon.
+Password can be seen by clicking on **see icon**.
 
-Password can be seen by clicking on see icon.
+### Add entries
+Click on **add button** (bottom left) to add an entry with desired entry and user names. After pressing **validate button**, an unpredictable password is generated from desired length and character types.
 
-Entry names can be searched in top right search bar which is case insensitive.
+### Edit entries
+Entry name, user name, and password can be edited by clicking on corresponding **edit icon**.
 
-A colored circle next to entries gives indication on password generation date: green for \< 3 months; orange for \< 6 months; red for \> 6 months.
+To confirm entry and user names edition, click again on **edit icon**. To confirm password edition, click on **validate button**.
 
-Click on bottom right button to delete desired entry. This choice must be validated.
+### Search entries
+Entry names can be searched in top left **search bar** which is case insensitive.
 
-Application can be closed by simply hitting close button. Entries are saved whenever they are updated.
+To validate a search result, click on desired entry name shown in the pop up menu.
+
+### Delete entries
+Click on **delete button** (bottom right) to delete desired entry. To confirm entry deletion, click on **validate button**.
+
+### Close application
+Application can be closed by simply hitting **close button** (top right). Entries are saved whenever they are updated.
 
 ## Build from source
 This project has been built on Windows from [Qt Creator IDE](https://www.qt.io/product/development-tools) using [MinGW](https://sourceforge.net/projects/mingw/) and [CMake](https://cmake.org/). With these tools, here are the different steps to build the application:
@@ -52,9 +63,9 @@ This project has been built on Windows from [Qt Creator IDE](https://www.qt.io/p
 		PRIVATE "/path/to/libsodium-win64/lib/libsodium.a"
 	)
 	```
-3. Build the project with release compiler. A directory called `PassePasse-v2.1.0-rc-Release` is created by Qt in parent directory of `src`.
+3. Build the project with release compiler. A directory called `PassePasse-v2.1.0-Release` is created by Qt in parent directory of `src`.
 4. Remove **all files but `PassePasse.exe`** in release directory and execute `windeployqt.exe` (located inside Qt directory, `C:\Qt\6.5.1\mingw_64\bin` for example) in a command prompt with `/path/to/PassePasse.exe` as argument.
-5. Move release folder to any convenient location and set a shortcut to executable file (if needed).
+5. Move release folder to any convenient location and set a shortcut to executable file if needed.
 6. Move the three files `default/crypto.params`, `default/entries.cipher`, and `default/master.hash` to release directory.
 7. See [Usage](#usage).
 
